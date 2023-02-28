@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CamMode;
 import frc.robot.Constants.LedMode;
 import frc.robot.Constants.PipeType;
+import frc.robot.util.XYOutputs;
 
 public class LimelightSubsystem extends SubsystemBase{
     private NetworkTableEntry tv, tx, ty, ta, camMode, ledMode, pipeline;
@@ -59,9 +60,16 @@ public class LimelightSubsystem extends SubsystemBase{
         return ta.getDouble(0);
     }
 
-    /* Pipeline Values
-        : 0-9 Pipeline currently being used by Limelight
-    */
+    /**
+     * Get the PipeType from the limelight
+     * 
+     * @return : Returns one of the following
+     *    PipeType.CONE
+     *    PipeType.CUBE
+     *    PipeType.INTAKE (Station)
+     *    PipeType.POLES
+     *    PipeType.TAGS (All)
+     */
     public PipeType getPipe() {
         switch((int)pipeline.getDouble(0)) {
             case 0:
@@ -291,6 +299,102 @@ public class LimelightSubsystem extends SubsystemBase{
         } else {
             driveTrain.drive(fwd, limelightSteerCommand); // Update values through drivetrain object passed through params | NOTE: "strafe" value is unchanged by tracking algorithm
         }
+    }
+
+    /**
+     * General purpose updateTracking
+     * 
+     * - Useful for being able to control complex systems through output of this function
+     *  FWD - Param of other overload not necessary here since you can opt to not use either
+     *  the XYOutputs.X or XYOutputs.Y of this function
+     * 
+     * @return : Returns a new XYOutputs function that allows the caller to control various unique subsystems using VI-Lime
+     *
+     */
+    public XYOutputs updateTracking(double driveFF, double steerFF) {
+        
+        // Check if we have target before trying to follow a target
+        if (!this.hasTarget()) {
+            return new XYOutputs(0, 0); // return allows us to exit the function at this point without unnecessarily executing code below
+        }
+  
+        // Find our commands (This is really our error)
+        double steer_cmd = getX() * k_steer; 
+        double drive_cmd = getY() * k_drive;
+
+        /* Drive FeedForward Algorithm 
+            - If moving backwards: SUBTRACT driveFF
+            - Else If moving forwards: ADD driveFF
+            - Else: Driving is Complete
+        */
+        if (getY() < -k_minError) {
+            drive_cmd -= driveFF;
+        } else if (getY() > k_minError) {
+            drive_cmd += driveFF;
+        } else {
+            drive_cmd = 0;
+        }
+
+        /* Steer FeedForward Algorithm
+            - If steering LEFT, and NOT moving in X: SUBTRACT steerFF
+            - Else if steering RIGHT, and NOT moving in X: ADD steerFF
+            - Else if steering LEFT, and moving in X: SUBTRACT drivingSteerFF
+            - Else if steering RIGHT, and moving in X: ADD drivingSteerFF
+            - Else: Steering is Complete
+        */
+        if (getX() < -k_minError) {
+            steer_cmd -= steerFF;
+        } else if (getX() > k_minError) {
+            steer_cmd += steerFF;
+        } else {
+            steer_cmd = 0;
+        }
+
+        // Constrain values so that the drive_cmd does not exceed maxDrive value
+        if (drive_cmd > k_maxDrive) {
+            drive_cmd = k_maxDrive;
+        } else if (drive_cmd < -k_maxDrive) {
+            drive_cmd = -k_maxDrive;
+        }
+
+        // Update final values
+        if (invertRot) {
+            limelightSteerCommand = -steer_cmd; // NEGEATIVE: steers LEFT | POSITIVE: steers RIGHT
+        } else {
+            limelightSteerCommand = steer_cmd; // NEGEATIVE: steers LEFT | POSITIVE: steers RIGHT
+        }
+
+        if (invertFwd) {
+            limelightDriveCommand = -drive_cmd; // Inverted = [ NEGATIVE: drives BACKWARDS | POSITIVE: drives FORWARDS ]
+        } else {
+            limelightDriveCommand = drive_cmd; // Inverted = [ NEGATIVE: drives BACKWARDS | POSITIVE: drives FORWARDS ]
+        }
+
+        return new XYOutputs(limelightDriveCommand, limelightSteerCommand); // Return new values from the VI-Lime to be used as generic PID style output
+    }
+
+    /**
+     * Calculate the distance the limelight is and return a tick amount to move
+     * 
+     * @param ticksPerInch : The number of ticks per inch in the mecanism we are trying to move
+     * @param mountAngleDegrees : The amount of degrees back the limelight is from being perfectly vertical
+     * @param lensHeightInches : The distance from the center of the limelight camera lens to the floor in inches
+     * @param targetHeightInches : The distance from the target to the floor in inches
+     * 
+     * @return Gives the distance from the limelight and the target in ticks relative to the controlling mechanism
+     */
+    public double calculateDistanceAsTicks(int ticksPerInch, double mountAngleDegrees, double lensHeightInches, double targetHeightInches) {
+
+        // Check if we have target before trying to follow a target
+        if (!this.hasTarget()) {
+            return 0.0; // return allows us to exit the function at this point without unnecessarily executing code below
+        }
+
+        double angleToTargetDegrees = mountAngleDegrees + getY();
+        double angleToTargetRadians = angleToTargetDegrees * (3.14159 / 180.0);
+
+        // Calculate distance
+        return (targetHeightInches - lensHeightInches)/Math.tan(angleToTargetRadians);
     }
 
 }
