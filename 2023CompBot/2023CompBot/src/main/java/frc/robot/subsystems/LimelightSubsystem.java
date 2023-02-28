@@ -5,14 +5,16 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.CamMode;
+import frc.robot.Constants.LedMode;
 
-public class Limelight extends SubsystemBase{
+public class LimelightSubsystem extends SubsystemBase{
     private NetworkTableEntry tv, tx, ty, ta, camMode, ledMode, pipeline;
     private NetworkTable limelightTable;
     private double limelightDriveCommand, limelightSteerCommand, k_drive, k_steer, k_minError, k_maxDrive;
     private boolean invertRot, invertFwd;
 
-    public Limelight(String name, double k_drive, double k_steer, double k_minError, double k_maxDrive, boolean invertFwd, boolean invertRot) {
+    public LimelightSubsystem(String name, double k_drive, double k_steer, double k_minError, double k_maxDrive, boolean invertFwd, boolean invertRot) {
         limelightTable = NetworkTableInstance.getDefault().getTable(name);
         this.k_drive = k_drive;
         this.k_steer = k_steer ;
@@ -85,31 +87,65 @@ public class Limelight extends SubsystemBase{
         2: Force Blink
         3: Force On
     */
-    public double getLedMode() {
-        return ledMode.getDouble(0);
+    public LedMode getLedMode() {
+        switch ((int)ledMode.getDouble(0)) {
+            case 0:
+                return LedMode.PIPE_SETTING;
+            case 1:
+                return LedMode.OFF;
+            case 2:
+                return LedMode.BLINK;
+        }
+        // Returns ON by default
+        return LedMode.ON;
     }
 
-    public void setLedMode(int ledSetting) {
-        if (ledSetting >= 0 && ledSetting <= 3) {
-            ledMode.setDouble(ledSetting);
-        } else {
-            System.out.println("!!! Error with limelight.setLedMode INVALID LEDMODE !!!");
+    public void setLedMode(LedMode ledMode) {
+        switch (ledMode) {
+            case PIPE_SETTING:
+                this.ledMode.setDouble(0);
+                break;
+            case OFF:
+                this.ledMode.setDouble(1);
+                break;
+            case BLINK:
+                this.ledMode.setDouble(2);
+                break;
+            default:
+                this.ledMode.setDouble(3);
+                break;
         }
     }
 
-    /* Camera Mode Values
-        0: Camera using Vision Processing
-        1: Driver Camera (Increases exposure, disables vision processing)
-    */
-    public double getCamMode() {
-        return camMode.getDouble(0);
+     
+    /**
+     * Camera Mode Values
+     *   0: Camera using Vision Processing
+     *   1: Driver Camera (Increases exposure, disables vision processing)
+     * @return double for camMode
+     */
+    public CamMode getCamMode() {
+        switch((int)this.camMode.getDouble(0)) {
+            case 1:
+                return CamMode.CAMERA;
+        }
+
+        return CamMode.VISION;
     }
 
-    public void setCamMode(int cameraMode) {
-        if (cameraMode == 0 || cameraMode == 1) {
-            camMode.setDouble(cameraMode);
-        } else {
-            System.out.println("!!! Error with limelight.setCamMode INVALID CAMERA MODE !!!");
+    /**
+     * Sets Camera Mode Values
+     *   0: Camera using Vision Processing
+     *   1: Driver Camera (Increases exposure, disables vision processing)
+     * @param cameraMode : Enables or disables vision using camMode
+     */
+    public void setCamMode(CamMode camMode) {
+        switch(camMode) {
+            case CAMERA:
+                this.camMode.setDouble(1);
+                break;
+            default:
+                this.camMode.setDouble(0);
         }
     }
 

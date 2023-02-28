@@ -50,6 +50,10 @@ public class DriveSubsystem extends SubsystemBase{
         pigeon = new Pigeon2(0);
     }
 
+    public void stop() {
+        drive(0, 0);
+    }
+
     public void resetEncoders() {
         frontLeft.setSelectedSensorPosition(0);
         frontRight.setSelectedSensorPosition(0);

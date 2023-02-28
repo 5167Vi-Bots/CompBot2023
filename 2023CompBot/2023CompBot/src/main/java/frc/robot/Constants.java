@@ -16,6 +16,38 @@ import javax.security.auth.x500.X500Principal;
  */
 public final class Constants {
   
+  /**
+   * CamMode enumeration that allows for switching
+   * between regular camera difficult to see vision targeting
+   */
+  public static enum CamMode {
+    VISION,
+    CAMERA
+  }
+
+  /**
+   * LedMode enumeration that defines which leds
+   * the limelight should be using
+   */
+  public static enum LedMode {
+    PIPE_SETTING,
+    OFF,
+    BLINK,
+    ON,
+  }
+
+  /**
+   * PipeType enumeration that defines what pipeline the
+   * limelight should use
+   */
+  public static enum PipeType {
+    CONE, // TRACK CONE
+    CUBE, // TRACK CUBE
+    TAGS, // TRACK ALL TAGS
+    POLES, // TRACK CONE POLES
+    INTAKE // TRACK INTAKE STATION TAG
+  }
+
   public static class Ports {
 
     public static class ControllerPorts {
