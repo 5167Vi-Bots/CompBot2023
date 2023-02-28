@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.CamMode;
 import frc.robot.Constants.LedMode;
+import frc.robot.Constants.PipeType;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 
@@ -11,7 +12,7 @@ public class LimeDrive extends CommandBase {
     private LimelightSubsystem limelight;
     private DriveSubsystem driveSubsystem;
 
-    public LimeDrive(LimelightSubsystem limelight, DriveSubsystem driveSubsystem, int pipe) {
+    public LimeDrive(LimelightSubsystem limelight, DriveSubsystem driveSubsystem, PipeType pipe) {
         this.limelight = limelight;
         this.limelight.setPipe(pipe);
         this.driveSubsystem = driveSubsystem;

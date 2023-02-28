@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CamMode;
 import frc.robot.Constants.LedMode;
+import frc.robot.Constants.PipeType;
 
 public class LimelightSubsystem extends SubsystemBase{
     private NetworkTableEntry tv, tx, ty, ta, camMode, ledMode, pipeline;
@@ -61,24 +62,69 @@ public class LimelightSubsystem extends SubsystemBase{
     /* Pipeline Values
         : 0-9 Pipeline currently being used by Limelight
     */
-    public double getPipe() {
-        return pipeline.getDouble(0);
+    public PipeType getPipe() {
+        switch((int)pipeline.getDouble(0)) {
+            case 0:
+                return PipeType.CONE;
+            case 1:
+                return PipeType.CUBE;
+            case 2:
+                return PipeType.INTAKE;
+            case 3:
+                return PipeType.POLES;
+            case 4:
+                return PipeType.TAGS;
+            default:
+                return PipeType.POLES;
+        }
     }
+    
 
-    public void setPipe(int pipe) {
-        if (pipe >= 0 && pipe <= 9) {
-            pipeline.setDouble(pipe);
-        } else {
-            System.out.println("!!! Error with limelight.setPipe INVALID PIPELINE !!!");
+    /**
+     * PipeType defined as enum to set the pipeline for the limelight
+     * 
+     * 
+     * @param pipeType : The type of pipeline to switch to
+     *    0 - CONE
+     *    1 - CUBE
+     *    2 - INTAKE (Station)
+     *    3 - POLES
+     *    4 - TAGS (All)
+     */
+    public void setPipe(PipeType pipeType) {
+        switch(pipeType) {
+            case CONE:
+                pipeline.setDouble(0);
+                break;
+            case CUBE:
+                pipeline.setDouble(1);
+                break;
+            case INTAKE:
+                pipeline.setDouble(2);
+                break;
+            case POLES:
+                pipeline.setDouble(3);
+                break;
+            case TAGS:
+                pipeline.setDouble(4);
+                break;
+            default:
+                pipeline.setDouble(3); // Default is cones
+                break;
         }
     }
 
+    /**
+     * DEPRECATED FOR 2023
+     * @param ac : The passed in Alliance object from driver station
+     * @deprecated
+     */
     public void setAlliancePipe(Alliance ac) {
-        if (ac == Alliance.Red) {
-            setPipe(1);
-        } else {
-            setPipe(0);
-        }
+        // if (ac == Alliance.Red) {
+        //     setPipe(1);
+        // } else {
+        //     setPipe(0);
+        // }
     }
 
     /* LEDMode Values
