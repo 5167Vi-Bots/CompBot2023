@@ -26,10 +26,10 @@ public class RotateHome extends CommandBase {
         armRotate.home();
     }
 
-    // @Override
-    // public boolean isFinished() {
-    //     return !armRotate.isMoving() && timer.get() > 0.7;
-    // }
+    @Override
+    public boolean isFinished() {
+        return !armRotate.isMoving() && timer.get() > 0.3;
+    }
 
     @Override
     public void end(boolean interrupted) {

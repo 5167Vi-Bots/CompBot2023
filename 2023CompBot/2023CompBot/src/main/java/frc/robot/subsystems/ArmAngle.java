@@ -15,10 +15,13 @@ public class ArmAngle extends SubsystemBase{
     public ArmAngle() {
         armAngle = new WPI_TalonFX(ArmConstants.kArmAngle);
         armAngle.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 15);
-        armAngle.setNeutralMode(NeutralMode.Brake);
+        armAngle.setNeutralMode(NeutralMode.Coast);
         armAngle.setInverted(true);
         armAngle.setSensorPhase(true);
-        armAngle.configClosedLoopPeakOutput(0, 0.25);
+        armAngle.configClosedLoopPeakOutput(0, 0.6);
+        armAngle.selectProfileSlot(0, 0);
+        armAngle.configMotionAcceleration(5000);
+        armAngle.configMotionCruiseVelocity(6000);
         armAngle.config_kP(0, 0.1);
     }
 
@@ -37,6 +40,10 @@ public class ArmAngle extends SubsystemBase{
         armAngle.set(ControlMode.PercentOutput, speed);
     }
 
+    public void doMagic(int position) {
+        armAngle.set(ControlMode.MotionMagic, position);
+    }
+
     public void setPosition(int position){
         armAngle.set(ControlMode.Position, position);
     }
@@ -46,7 +53,7 @@ public class ArmAngle extends SubsystemBase{
     }
 
     public boolean isMoving() {
-        return (armAngle.getClosedLoopError(0)) > 1250;
+        return Math.abs(armAngle.getActiveTrajectoryVelocity()) > 100;
     }
 
     public void stop() {
@@ -54,19 +61,19 @@ public class ArmAngle extends SubsystemBase{
     }
 
     public void home(){
-        setPosition(0);
+        doMagic(0);
     }
 
     public void low(){
-        setPosition(-75400);
+        doMagic(-75400);
     }
 
     public void med(){
-        setPosition(-48700);
+        doMagic(-38000);
     }
 
     public void high(){
-        setPosition(-36500);
+        doMagic(-34500);
     }
 
 

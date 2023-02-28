@@ -30,7 +30,7 @@ public class AngleMed extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return !armAngle.isMoving() && timer.get() > 0.7;
+        return !armAngle.isMoving() && timer.get() > 0.15;
     }
 
     @Override

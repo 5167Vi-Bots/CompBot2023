@@ -23,7 +23,7 @@ public class DefaultDrive extends CommandBase {
 
     @Override
     public void execute() {
-        driveSubsystem.drive(x.getAsDouble(), -z.getAsDouble());
+        driveSubsystem.drive(-x.getAsDouble(), -z.getAsDouble());
     }
 
     @Override

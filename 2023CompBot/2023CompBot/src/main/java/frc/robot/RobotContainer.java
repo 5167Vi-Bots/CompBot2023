@@ -29,6 +29,7 @@ import frc.robot.commands.DefaultDrive;
 import frc.robot.commands.ExtendHigh;
 import frc.robot.commands.ExtendHome;
 import frc.robot.commands.ExtendLow;
+import frc.robot.commands.ExtendManualPosition;
 import frc.robot.commands.ExtendMed;
 import frc.robot.commands.RotateBack;
 import frc.robot.commands.RotateHome;
@@ -64,11 +65,11 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
 
-    // driveSubsystem.setDefaultCommand(
-    //   new DefaultDrive(driveSubsystem,
-    //    () -> driverController.getLeftY(),
-    //   () -> driverController.getRightX())
-    // );
+    driveSubsystem.setDefaultCommand(
+      new DefaultDrive(driveSubsystem,
+       () -> driverController.getLeftY(),
+      () -> driverController.getRightX())
+    );
   }
 
   public void teleInit() {
@@ -99,19 +100,30 @@ public class RobotContainer {
     // Extend half 3
     // Extend Home 1
 
+    driverController.axisGreaterThan(2, 0.2).whileTrue(new ExtendManualPosition(armExtend, false));
+    driverController.axisGreaterThan(3, 0.2).whileTrue(new ExtendManualPosition(armExtend, true));
 
-    // buttonBoard.button(10).whileTrue(new AngleHigh(armAngle));
-    // buttonBoard.button(9).whileTrue(new AngleMed(armAngle));
-    // buttonBoard.button(8).whileTrue(new AngleLow(armAngle));
-    // buttonBoard.button(7).whileTrue(new AngleHome(armAngle));
-    // buttonBoard.button(10).whileTrue(new ExtendHigh(armExtend));
+
+    // On high extend home, angle home, extend position, angle position
+    buttonBoard.button(10).or(driverController.y()).toggleOnTrue(new ExtendHome(armExtend).andThen(new AngleHome(armAngle)).andThen(new ExtendHigh(armExtend).until( () -> (driverController.getRightTriggerAxis() > 0.2) || driverController.getLeftTriggerAxis() > 0.2).andThen(new AngleHigh(armAngle))));
+    buttonBoard.button(9).or(driverController.b()).toggleOnTrue(new ExtendHome(armExtend).andThen(new AngleMed(armAngle)).andThen(new ExtendMed(armExtend).until( () -> (driverController.getRightTriggerAxis() > 0.2) || driverController.getLeftTriggerAxis() > 0.2)));
+    buttonBoard.button(8).or(driverController.a()).toggleOnTrue(new ExtendHome(armExtend).andThen(new AngleLow(armAngle)).andThen(new ExtendLow(armExtend).until( () -> (driverController.getRightTriggerAxis() > 0.2) || driverController.getLeftTriggerAxis() > 0.2)));
+    buttonBoard.button(7).or(driverController.x()).toggleOnTrue(new ExtendHome(armExtend).andThen(new AngleHome(armAngle)).andThen(new ExtendHome(armExtend)));
+    // buttonBoard.button(10).whileTrue(new ExtendHome(armExtend).andThen(new AngleHome(armAngle)));
     // buttonBoard.button(9).whileTrue(new ExtendMed(armExtend));
-    // buttonBoard.button(8).whileTrue(new ExtendMed(armExtend));
-    //buttonBoard.button(7).whileTrue(new ExtendHome(armExtend));
-    buttonBoard.button(2).toggleOnTrue(new RotateLeft(armRotate));
-    buttonBoard.button(1).toggleOnTrue(new RotateBack(armRotate));
-    buttonBoard.button(3).toggleOnTrue(new RotateRight(armRotate));
-    buttonBoard.button(4).toggleOnTrue(new RotateHome(armRotate));
+    // buttonBoard.button(8).whileTrue(new ExtendLow(armExtend));
+    // buttonBoard.button(7).whileTrue(new ExtendHome(armExtend));
+    buttonBoard.button(2).or(driverController.povLeft()).toggleOnTrue(new RotateLeft(armRotate));
+    buttonBoard.button(1).or(driverController.povDown()).toggleOnTrue(new RotateBack(armRotate));
+    buttonBoard.button(3).or(driverController.povRight()).toggleOnTrue(new RotateRight(armRotate));
+    buttonBoard.button(4).or(driverController.povUp()).toggleOnTrue(new RotateHome(armRotate));
+    // buttonBoard.button(10).whileTrue(new ArmFrontHigh(armAngle, armExtend, armRotate));
+    // buttonBoard.button(9).whileTrue(new ArmFrontMed(armAngle, armExtend, armRotate));
+    // buttonBoard.button(8).whileTrue(new ArmFrontLow(armAngle, armExtend, armRotate));
+    // buttonBoard.button(7).whileTrue(new ArmHome(armAngle, armExtend, armRotate));
+    // buttonBoard.button(5).whileTrue(new ArmRightHigh(armAngle, armExtend, armRotate));
+    // buttonBoard.button(3).whileTrue(new ArmRightMed(armAngle, armExtend, armRotate));
+    // buttonBoard.button(1).whileTrue(new ArmRightLow(armAngle, armExtend, armRotate));
     
     // home is 10
     // high is 9
@@ -136,9 +148,9 @@ public class RobotContainer {
     // // button 10 is back high
     // buttonBoard.button(10).whileTrue(new ArmBackHigh(armAngle, armExtend, armRotate));
     // // button 11 is open
-    buttonBoard.button(11).whileTrue(new ClawMove(claw, true));
+    buttonBoard.button(11).or(driverController.leftBumper()).whileTrue(new ClawMove(claw, true));
     // // button 12 is close
-    buttonBoard.button(12).whileTrue(new ClawMove(claw, false));
+    buttonBoard.button(12).or(driverController.rightBumper()).whileTrue(new ClawMove(claw, false));
 
   }
 

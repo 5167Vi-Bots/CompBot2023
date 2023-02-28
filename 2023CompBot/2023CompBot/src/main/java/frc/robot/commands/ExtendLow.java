@@ -26,10 +26,10 @@ public class ExtendLow extends CommandBase{
         armExtend.low();
     }
 
-    // @Override
-    // public boolean isFinished() {
-    //     return !armExtend.isMoving() && timer.get() > 0.7;
-    // }
+    @Override
+    public boolean isFinished() {
+        return !armExtend.isMoving() && timer.get() > 0.15;
+    }
 
     @Override
     public void end(boolean interrupted) {

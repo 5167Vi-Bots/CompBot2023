@@ -36,7 +36,7 @@ public final class Constants {
       public static final int kArmRotate = 5;
       public static final int kArmExtend = 7;
       public static final int kArmAngle = 6;
-      public static final int kClawForward = 1;
+      public static final int kClawForward = 3;
       public static final int kClawReverse = 2;
     }
 

@@ -8,19 +8,22 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import static frc.robot.Constants.Ports.ArmConstants;
+import frc.robot.Constants.Ports.ArmConstants;
 
 public class ArmExtend extends SubsystemBase{
-    private WPI_TalonSRX armExtend;
+    private WPI_TalonFX armExtend;
 
     public ArmExtend() {
-        armExtend = new WPI_TalonSRX(ArmConstants.kArmExtend);
-        armExtend.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 15);
-        armExtend.setNeutralMode(NeutralMode.Brake);
+        armExtend = new WPI_TalonFX(ArmConstants.kArmExtend);
+        armExtend.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 15);
+        armExtend.setNeutralMode(NeutralMode.Coast);
         armExtend.setInverted(false);
         armExtend.setSensorPhase(false);
         armExtend.configClosedLoopPeakOutput(0, 0.6);
-        armExtend.config_kP(0, 0.05);
+        armExtend.config_kP(0, 0.1);
+        armExtend.selectProfileSlot(0, 0);
+        armExtend.configMotionAcceleration(7000);
+        armExtend.configMotionCruiseVelocity(8000);
     }
 
     public void resetEncoder() {
@@ -31,6 +34,10 @@ public class ArmExtend extends SubsystemBase{
     public void periodic() {
         SmartDashboard.putNumber("Arm Extend Position", getPosition());
         SmartDashboard.updateValues();
+    }
+
+    public void doMagic(int position) {
+        armExtend.set(ControlMode.MotionMagic, position);
     }
 
     public void setSpeed(double speed){
@@ -50,23 +57,23 @@ public class ArmExtend extends SubsystemBase{
     }
 
     public boolean isMoving() {
-        return (armExtend.getClosedLoopError(0)) > 1250;
+        return Math.abs(armExtend.getActiveTrajectoryVelocity()) > 100;
     }
 
     public void home(){
-        setPosition(0);
+        doMagic(0);
     }
 
     public void low(){
-        setPosition(1000);
+        doMagic(-0);
     }
 
     public void med(){
-        setPosition(70000);
+        doMagic(-45000);
     }
 
     public void high(){
-        setPosition(140000); //max 175000 ? :140000
+        doMagic(-144680); //max 175000 ? :140000
     }
 
 

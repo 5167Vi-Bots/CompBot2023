@@ -28,7 +28,7 @@ public class RotateRight extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return !armRotate.isMoving() && timer.get() > 0.7;
+        return !armRotate.isMoving() && timer.get() > 0.3;
     }
 
     @Override

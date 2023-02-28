@@ -9,16 +9,21 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.Ports.ArmConstants;
 
+import java.util.ResourceBundle.Control;
+
 public class ArmRotate extends SubsystemBase{
     private WPI_TalonFX armRotate;
 
     public ArmRotate() {
         armRotate = new WPI_TalonFX(ArmConstants.kArmRotate);
         armRotate.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 15);
-        armRotate.setNeutralMode(NeutralMode.Brake);
+        armRotate.setNeutralMode(NeutralMode.Coast);
         armRotate.setInverted(false);
         armRotate.setSensorPhase(false);
-        armRotate.configClosedLoopPeakOutput(0, 0.25);
+        armRotate.configClosedLoopPeakOutput(0, 0.5);
+        armRotate.selectProfileSlot(0, 0);
+        armRotate.configMotionAcceleration(1500);
+        armRotate.configMotionCruiseVelocity(3000);
         armRotate.config_kP(0, 0.1); // 0.5
         armRotate.configForwardSoftLimitEnable(false);
         armRotate.configReverseSoftLimitEnable(false);
@@ -52,33 +57,37 @@ public class ArmRotate extends SubsystemBase{
         // }
         armRotate.set(ControlMode.Position, position);
     }
+    
+    public void doMagic(int position) {
+        armRotate.set(ControlMode.MotionMagic, position);
+    }
 
     public double getPosition() {
         return armRotate.getSelectedSensorPosition();
     }
 
     public boolean isMoving() {
-        return (armRotate.getClosedLoopError(0)) > 120;
+        return Math.abs(armRotate.getActiveTrajectoryVelocity()) > 100;
     }
 
     public void home(){
-        setPosition(0);
+        doMagic(0);
     }
 
     public void front() {
-        setPosition(0);
+        doMagic(0);
     }
 
     public void right() {
-        setPosition(7155); // max positive 7500
+        doMagic(-34500); // max positive 7500
     }
 
     public void left() {
-        setPosition(-6400); 
+        doMagic(34500); 
     }
 
     public void back() {
-        setPosition(-13200); //max neg -13800
+        doMagic(-68500); //max neg -13800
     }
 
 
