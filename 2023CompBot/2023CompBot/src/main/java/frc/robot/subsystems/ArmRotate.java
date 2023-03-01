@@ -17,7 +17,7 @@ public class ArmRotate extends SubsystemBase{
     public ArmRotate() {
         armRotate = new WPI_TalonFX(ArmConstants.kArmRotate);
         armRotate.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 15);
-        armRotate.setNeutralMode(NeutralMode.Brake);
+        armRotate.setNeutralMode(NeutralMode.Coast);
         armRotate.setInverted(false);
         armRotate.setSensorPhase(false);
         armRotate.configClosedLoopPeakOutput(0, 0.5);

@@ -15,7 +15,7 @@ public class ArmAngle extends SubsystemBase{
     public ArmAngle() {
         armAngle = new WPI_TalonFX(ArmConstants.kArmAngle);
         armAngle.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 15);
-        armAngle.setNeutralMode(NeutralMode.Brake);
+        armAngle.setNeutralMode(NeutralMode.Coast);
         armAngle.setInverted(true);
         armAngle.setSensorPhase(true);
         armAngle.configClosedLoopPeakOutput(0, 0.6);
@@ -74,6 +74,10 @@ public class ArmAngle extends SubsystemBase{
 
     public void high(){
         doMagic(-39500); // 40500
+    }
+
+    public void intake() {
+        doMagic(-33800);
     }
 
 
