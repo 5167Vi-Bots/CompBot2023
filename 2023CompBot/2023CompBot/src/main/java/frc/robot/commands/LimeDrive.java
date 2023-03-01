@@ -25,7 +25,7 @@ public class LimeDrive extends CommandBase {
     public void initialize() {
         limelight.setCamMode(CamMode.VISION);
         limelight.setLedMode(LedMode.PIPE_SETTING);
-        driveSubsystem.stop();
+        // driveSubsystem.stop();
     }
 
     @Override

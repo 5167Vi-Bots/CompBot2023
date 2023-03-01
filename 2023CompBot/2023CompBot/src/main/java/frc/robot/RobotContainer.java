@@ -21,12 +21,14 @@ import frc.robot.commandgroups.ArmHome;
 import frc.robot.commandgroups.ArmRightHigh;
 import frc.robot.commandgroups.ArmRightLow;
 import frc.robot.commandgroups.ArmRightMed;
+import frc.robot.commandgroups.ConeMove;
 import frc.robot.commands.AngleHigh;
 import frc.robot.commands.AngleHome;
 import frc.robot.commands.AngleLow;
 import frc.robot.commands.AngleMed;
 import frc.robot.commands.ClawMove;
 import frc.robot.commands.DefaultDrive;
+import frc.robot.commands.DriveDistance;
 import frc.robot.commands.ExtendHigh;
 import frc.robot.commands.ExtendHome;
 import frc.robot.commands.ExtendLow;
@@ -166,6 +168,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return null; // Pssssst Put auton command hereeeee (Almost guaranteed to be a sequential command group)
+    return new ConeMove(driveSubsystem, armExtend, armRotate, armAngle, claw); // Pssssst Put auton command hereeeee (Almost guaranteed to be a sequential command group)
   }
 }

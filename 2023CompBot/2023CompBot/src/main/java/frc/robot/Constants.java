@@ -15,8 +15,7 @@ import javax.security.auth.x500.X500Principal;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-  
-  /**
+    /**
    * CamMode enumeration that allows for switching
    * between regular camera difficult to see vision targeting
    */
@@ -47,7 +46,7 @@ public final class Constants {
     POLES, // TRACK CONE POLES
     INTAKE // TRACK INTAKE STATION TAG
   }
-
+  
   public static class Ports {
 
     public static class ControllerPorts {
@@ -72,7 +71,44 @@ public final class Constants {
       public static final int kClawReverse = 2;
     }
 
+    public static class LEDConstants
+    {
+      public static final int TimerBlinkenPWM = 9;
+      public static final int MessageBlinkenPWM = 8;
+    }
+
   }
+
+
+
+
+public static final class LightConstants {
+
+public static class LEDColors
+{
+
+public static final double SolidPurple = .91;
+public static final double SolidYellow = .69;
+public static final double FirePattern = -0.59;
+public static final double SolidDarkBlue = 0.85;
+public static final double SolidRed = 0.61; 
+public static final double SolidGreen = 0.77;
+
+public static final double DarkRed = 0.59;
+public static final double BreathingRed = -0.17;
+public static final double HeartbeatRed = -0.25;
+public static final double StrobeRed = -0.11;
+
+public static final double DarkBlue = 0.85;
+public static final double BreathingBlue = -0.15;
+public static final double HeartbeatBlue = -0.23;
+public static final double StrobeBlue = -0.09;
+
+public static final double White = 0.93;
+public static final double BreathingWhite = -0.13;
+public static final double HeartbeatWhite = -0.21;
+public static final double StrobeWhite = -0.05;
+}}
 
 }
 
