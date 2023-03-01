@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.PipeType;
 import frc.robot.Constants.Ports.ControllerPorts;
 import frc.robot.commandgroups.ArmBackHigh;
 import frc.robot.commandgroups.ArmBackLow;
@@ -31,6 +32,7 @@ import frc.robot.commands.ExtendHome;
 import frc.robot.commands.ExtendLow;
 import frc.robot.commands.ExtendManualPosition;
 import frc.robot.commands.ExtendMed;
+import frc.robot.commands.LimeDrive;
 import frc.robot.commands.RotateBack;
 import frc.robot.commands.RotateHome;
 import frc.robot.commands.RotateLeft;
@@ -40,6 +42,7 @@ import frc.robot.subsystems.ArmExtend;
 import frc.robot.subsystems.ArmRotate;
 import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.LimelightSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -50,6 +53,7 @@ import frc.robot.subsystems.DriveSubsystem;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveSubsystem driveSubsystem = new DriveSubsystem();
+  private final LimelightSubsystem limelight = new LimelightSubsystem("limelight-jimmy", 0.027, 0.025, 0.5, .5, true, true);
   private final ArmExtend armExtend = new ArmExtend();
   private final ArmRotate armRotate = new ArmRotate();
   private final ArmAngle armAngle = new ArmAngle();
@@ -101,12 +105,13 @@ public class RobotContainer {
     // Extend Home 1
 
     driverController.axisGreaterThan(2, 0.2).whileTrue(new ExtendManualPosition(armExtend, false));
-    driverController.axisGreaterThan(3, 0.2).whileTrue(new ExtendManualPosition(armExtend, true));
+    // driverController.axisGreaterThan(3, 0.2).whileTrue(new LimeDrive(limelight, driveSubsystem, PipeType.CONE));//.whileTrue(new ExtendManualPosition(armExtend, true));
 
 
     // On high extend home, angle home, extend position, angle position
-    buttonBoard.button(10).or(driverController.y()).toggleOnTrue(new ExtendHome(armExtend).andThen(new AngleHome(armAngle)).andThen(new ExtendHigh(armExtend).until( () -> (driverController.getRightTriggerAxis() > 0.2) || driverController.getLeftTriggerAxis() > 0.2).andThen(new AngleHigh(armAngle))));
-    buttonBoard.button(9).or(driverController.b()).toggleOnTrue(new ExtendHome(armExtend).andThen(new AngleMed(armAngle)).andThen(new ExtendMed(armExtend).until( () -> (driverController.getRightTriggerAxis() > 0.2) || driverController.getLeftTriggerAxis() > 0.2)));
+    // buttonBoard.button(10).or(driverController.y()).toggleOnTrue(new ExtendHome(armExtend).andThen(new AngleHome(armAngle)).andThen(new ExtendHigh(armExtend).until( () -> (driverController.getRightTriggerAxis() > 0.2) || driverController.getLeftTriggerAxis() > 0.2).andThen(new AngleHigh(armAngle))));
+    buttonBoard.button(10).toggleOnTrue(new ExtendHome(armExtend).andThen(new AngleHigh(armAngle)).andThen(new ExtendHigh(armExtend)).andThen(new AngleMed(armAngle)));
+    buttonBoard.button(9).or(driverController.b()).toggleOnTrue(new ExtendHome(armExtend).andThen(new AngleHigh(armAngle)).andThen(new ExtendMed(armExtend).until( () -> (driverController.getRightTriggerAxis() > 0.2) || driverController.getLeftTriggerAxis() > 0.2)).andThen(new AngleMed(armAngle)));
     buttonBoard.button(8).or(driverController.a()).toggleOnTrue(new ExtendHome(armExtend).andThen(new AngleLow(armAngle)).andThen(new ExtendLow(armExtend).until( () -> (driverController.getRightTriggerAxis() > 0.2) || driverController.getLeftTriggerAxis() > 0.2)));
     buttonBoard.button(7).or(driverController.x()).toggleOnTrue(new ExtendHome(armExtend).andThen(new AngleHome(armAngle)).andThen(new ExtendHome(armExtend)));
     // buttonBoard.button(10).whileTrue(new ExtendHome(armExtend).andThen(new AngleHome(armAngle)));

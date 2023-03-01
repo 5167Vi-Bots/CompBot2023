@@ -14,7 +14,7 @@ public class LimeDrive extends CommandBase {
 
     public LimeDrive(LimelightSubsystem limelight, DriveSubsystem driveSubsystem, PipeType pipe) {
         this.limelight = limelight;
-        this.limelight.setPipe(pipe);
+        // this.limelight.setPipe(pipe);
         this.driveSubsystem = driveSubsystem;
 
         addRequirements(limelight, driveSubsystem);
@@ -33,8 +33,8 @@ public class LimeDrive extends CommandBase {
         limelight.updateTracking(0, 0, driveSubsystem);
     }
 
-    @Override
-    public boolean isFinished() {
-        return limelight.doneTargeting();
-    }
+    // @Override
+    // public boolean isFinished() {
+    //     // return limelight.doneTargeting();
+    // }
 }

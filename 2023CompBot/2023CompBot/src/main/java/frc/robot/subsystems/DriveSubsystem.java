@@ -8,6 +8,7 @@ import com.ctre.phoenix.sensors.Pigeon2;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.Ports.DriveConstants;
 
@@ -16,7 +17,7 @@ public class DriveSubsystem extends SubsystemBase{
     private DifferentialDrive driveTrain;
     private WPI_TalonFX frontLeft, frontRight, backLeft, backRight;
     //private final double ticksPerInch = 2048; //1365 208
-    private final double driveFeedForward = 0.225;// 0.235 does move 0.225 doesn't
+    private final double driveFeedForward = 0.235;// 0.235 does move 0.225 doesn't
     private final double steerFeedForward = 0.16; // 0.24, 0.16
     private final double drive_kP = 0.03;
     private final double steer_kP = 0.03;
@@ -41,6 +42,7 @@ public class DriveSubsystem extends SubsystemBase{
         rightGroup = new MotorControllerGroup(frontRight, backRight);
 
         driveTrain = new DifferentialDrive(leftGroup, rightGroup);
+        driveTrain.setDeadband(0.03);
         
         frontLeft.setNeutralMode(NeutralMode.Brake);
         backLeft.setNeutralMode(NeutralMode.Brake);
@@ -73,6 +75,7 @@ public class DriveSubsystem extends SubsystemBase{
     }
 
     public void drive(double x, double z){
+        System.out.println(x);
         driveTrain.arcadeDrive(x, z);
     }
 

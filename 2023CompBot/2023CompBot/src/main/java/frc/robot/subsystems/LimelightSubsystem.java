@@ -231,15 +231,15 @@ public class LimelightSubsystem extends SubsystemBase{
 
     public void updateTracking(double fwd, double strafe, DriveSubsystem driveTrain) {
         
-        // Check if we have target before trying to follow a target
-        if (!this.hasTarget()) {
-          limelightDriveCommand = 0.0;
-          limelightSteerCommand = 0.35;
-          driveTrain.drive(limelightDriveCommand, limelightSteerCommand); // Safely rotate until we see a target while trying to target
-          return; // return allows us to exit the function at this point without unnecessarily executing code below
-        }
+        // // Check if we have target before trying to follow a target
+        // if (!this.hasTarget()) {
+        //   limelightDriveCommand = 0.0;
+        //   limelightSteerCommand = 0.35;
+        //   driveTrain.drive(limelightDriveCommand, limelightSteerCommand); // Safely rotate until we see a target while trying to target
+        //   return; // return allows us to exit the function at this point without unnecessarily executing code below
+        // }
 
-        driveTrain.drive(0, 0);
+        // driveTrain.drive(0, 0);
 
         // Find our commands (This is really our error)
         double steer_cmd = getX() * k_steer; 
@@ -294,11 +294,9 @@ public class LimelightSubsystem extends SubsystemBase{
             limelightDriveCommand = drive_cmd; // Inverted = [ NEGATIVE: drives BACKWARDS | POSITIVE: drives FORWARDS ]
         }
 
-        if (fwd == 0) {
-            driveTrain.drive(limelightDriveCommand, limelightSteerCommand); // Update values through drivetrain object passed through params | NOTE: "strafe" value is unchanged by tracking algorithm
-        } else {
-            driveTrain.drive(fwd, limelightSteerCommand); // Update values through drivetrain object passed through params | NOTE: "strafe" value is unchanged by tracking algorithm
-        }
+       
+        driveTrain.drive(limelightDriveCommand, limelightSteerCommand); // Update values through drivetrain object passed through params | NOTE: "strafe" value is unchanged by tracking algorithm
+     
     }
 
     /**
