@@ -29,13 +29,13 @@ public class Balance extends CommandBase {
     
         @Override
         public void execute() {
-
+            System.out.println("Running Balance");
             //-17 is initial ramp, -11/10 is on top but not balanced
              double currentPitch = driveSubsystem.getPitch();
-            if (currentPitch> 1 && currentPitch < 15)
-                driveSubsystem.drive(.35, 0);
+            if (currentPitch > 2.5 && currentPitch < 15)
+                driveSubsystem.drive(.30, 0);
             if(currentPitch < -2.5 && currentPitch > -15)
-                driveSubsystem.drive(-.35, 0);
+                driveSubsystem.drive(-.0, 0);
             if(currentPitch < 2.5 && currentPitch > -1)
                 driveSubsystem.drive(0,0);
             if (currentPitch < -15)

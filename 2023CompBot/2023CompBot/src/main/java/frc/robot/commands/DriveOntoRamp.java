@@ -14,9 +14,11 @@ public class DriveOntoRamp extends CommandBase {
         private final double kP = 0.03;
         private double error;
         private double output;
+        boolean Reverse;
 
-        public DriveOntoRamp(DriveSubsystem driveSubsystem) {
+        public DriveOntoRamp(DriveSubsystem driveSubsystem, boolean Reverse) {
             this.driveSubsystem = driveSubsystem;
+            this.Reverse = Reverse;
             addRequirements(driveSubsystem);
         }
     
@@ -38,7 +40,10 @@ public class DriveOntoRamp extends CommandBase {
             // }
             // else
             // {
-                driveSubsystem.drive(.5,0);
+                if (!Reverse)
+                    driveSubsystem.drive(.5,0);
+                else 
+                    driveSubsystem.drive(-.5,0);
             // }
              
 
@@ -80,10 +85,10 @@ public class DriveOntoRamp extends CommandBase {
 
             
             boolean IsDone = false;
-            double currentPitch =  driveSubsystem.getPitch();
+            double currentPitch =  Math.abs(driveSubsystem.getPitch());
             
-            IsDone = (currentPitch > 5 || currentPitch < -5);
-            if (i < 100 && IsDone)
+            IsDone = (currentPitch > 3);
+            if (i < 20 && IsDone)
             {
                 i++;
                 return false;

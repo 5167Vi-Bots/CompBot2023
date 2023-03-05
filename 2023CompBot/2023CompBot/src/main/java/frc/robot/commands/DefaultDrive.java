@@ -9,10 +9,12 @@ public class DefaultDrive extends CommandBase {
     private DriveSubsystem driveSubsystem;
     private DoubleSupplier x, z;
 
-    public DefaultDrive(DriveSubsystem driveSubsystem, DoubleSupplier x, DoubleSupplier z) {
+    private double speedLimit;
+    public DefaultDrive(DriveSubsystem driveSubsystem, DoubleSupplier x, DoubleSupplier z, double speedLimit) {
         this.driveSubsystem = driveSubsystem;
         this.x = x;
         this.z = z;
+        this.speedLimit = speedLimit;
         addRequirements(driveSubsystem);
     }
 
@@ -23,7 +25,18 @@ public class DefaultDrive extends CommandBase {
 
     @Override
     public void execute() {
-        driveSubsystem.drive(-x.getAsDouble(), -z.getAsDouble());
+        driveSubsystem.drive(x.getAsDouble()*-speedLimit, SquareInputs(z.getAsDouble() *speedLimit)*-1);
+    }
+    
+    private double SquareInputs(double Input)
+    {
+        double SquaredInput = Input*Input;
+        boolean isNegative = Input < 0;
+
+        if (isNegative)
+        SquaredInput = SquaredInput * -1;
+
+        return SquaredInput;
     }
 
     @Override

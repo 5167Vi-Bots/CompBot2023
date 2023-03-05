@@ -79,9 +79,9 @@ public class DriveOffOfRamp extends CommandBase {
         {
 
             boolean IsDone = false;
-            double currentPitch =  driveSubsystem.getPitch();
+            double currentPitch =  Math.abs(driveSubsystem.getPitch());
             
-            IsDone = (currentPitch < 2 || currentPitch > -2);
+            IsDone = (currentPitch < 3);
             if (i < 20 && IsDone)
             {
                 i++;

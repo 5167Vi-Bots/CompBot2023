@@ -5,11 +5,13 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.AngleHigh;
 import frc.robot.commands.AngleHome;
 import frc.robot.commands.AngleMed;
+import frc.robot.commands.Balance;
 import frc.robot.commands.ClawMove;
 import frc.robot.commands.DriveDistance;
+import frc.robot.commands.DriveOffOfRamp;
+import frc.robot.commands.DriveOntoRamp;
 import frc.robot.commands.ExtendHigh;
 import frc.robot.commands.ExtendHome;
-import frc.robot.commands.RotateBack;
 import frc.robot.commands.RotateHome;
 import frc.robot.subsystems.ArmAngle;
 import frc.robot.subsystems.ArmExtend;
@@ -17,10 +19,12 @@ import frc.robot.subsystems.ArmRotate;
 import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.DriveSubsystem;
 
-public class ConeMove extends SequentialCommandGroup {
-    public ConeMove(DriveSubsystem driveSubsystem, ArmExtend armExtend, ArmRotate armRotate, ArmAngle armAngle, Claw claw) {
+public class ConeRampMove extends SequentialCommandGroup{
+    public ConeRampMove(DriveSubsystem driveSubsystem, ArmExtend armExtend, ArmRotate armRotate, ArmAngle armAngle, Claw claw) {
         addCommands(
-            // Send Arm Home
+
+
+
             new AngleHome(armAngle),
             new ExtendHome(armExtend),
             new RotateHome(armRotate),
@@ -34,8 +38,21 @@ public class ConeMove extends SequentialCommandGroup {
             new ExtendHome(armExtend),
             new AngleHome(armAngle),
             new WaitCommand(2),
-            new DriveDistance(driveSubsystem, -150)
+
+
+            new DriveOntoRamp(driveSubsystem, true),
+            // new WaitCommand(2),
+            // new DriveOffOfRamp(driveSubsystem),
+            // new WaitCommand(2),
+
+            // new DriveDistance(driveSubsystem, -20),
+            // new WaitCommand(2),
+
+            // new DriveOntoRamp(driveSubsystem, true),
+            // new WaitCommand(2),
+
+            new Balance(driveSubsystem)
             // new DriveDistance(driveSubsystem, -110).alongWith(new RotateBack(armRotate)).withTimeout(4)
         );
-    }
+}
 }

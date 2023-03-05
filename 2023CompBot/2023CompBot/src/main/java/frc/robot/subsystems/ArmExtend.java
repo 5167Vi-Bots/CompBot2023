@@ -16,14 +16,15 @@ public class ArmExtend extends SubsystemBase{
     public ArmExtend() {
         armExtend = new WPI_TalonFX(ArmConstants.kArmExtend);
         armExtend.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 15);
-        armExtend.setNeutralMode(NeutralMode.Coast);
+        armExtend.setNeutralMode(NeutralMode.Brake);
         armExtend.setInverted(false);
         armExtend.setSensorPhase(false);
         armExtend.configClosedLoopPeakOutput(0, 0.6);
         armExtend.config_kP(0, 0.1);
         armExtend.selectProfileSlot(0, 0);
-        armExtend.configMotionAcceleration(8000);
-        armExtend.configMotionCruiseVelocity(8000);
+        // Motion Magic Config
+        armExtend.configMotionAcceleration(7500);
+        armExtend.configMotionCruiseVelocity(7500);
     }
 
     public void resetEncoder() {
@@ -73,7 +74,7 @@ public class ArmExtend extends SubsystemBase{
     }
 
     public void high(){
-        doMagic(-170400); //max 175000 ? :140000
+        doMagic(-165400); //max 175000 ? :140000
     }
 
     public void intake() {

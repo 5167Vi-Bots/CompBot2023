@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -22,11 +23,13 @@ import frc.robot.commandgroups.ArmRightHigh;
 import frc.robot.commandgroups.ArmRightLow;
 import frc.robot.commandgroups.ArmRightMed;
 import frc.robot.commandgroups.ConeMove;
+import frc.robot.commandgroups.ConeRampMove;
 import frc.robot.commands.AngleHigh;
 import frc.robot.commands.AngleHome;
 import frc.robot.commands.AngleIntake;
 import frc.robot.commands.AngleLow;
 import frc.robot.commands.AngleMed;
+import frc.robot.commands.Balance;
 import frc.robot.commands.ClawMove;
 import frc.robot.commands.DefaultDrive;
 import frc.robot.commands.DriveDistance;
@@ -40,7 +43,9 @@ import frc.robot.commands.LimeDrive;
 import frc.robot.commands.RotateBack;
 import frc.robot.commands.RotateHome;
 import frc.robot.commands.RotateLeft;
+import frc.robot.commands.RotateManualPosition;
 import frc.robot.commands.RotateRight;
+import frc.robot.commands.SetColor;
 import frc.robot.subsystems.ArmAngle;
 import frc.robot.subsystems.ArmExtend;
 import frc.robot.subsystems.ArmRotate;
@@ -66,7 +71,7 @@ public class RobotContainer {
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driverController = new CommandXboxController(ControllerPorts.kDriverControllerPort);
   private final CommandJoystick buttonBoard = new CommandJoystick(ControllerPorts.kOperatorControllerPort);
-
+  
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -76,7 +81,8 @@ public class RobotContainer {
     driveSubsystem.setDefaultCommand(
       new DefaultDrive(driveSubsystem,
        () -> driverController.getLeftY(),
-      () -> driverController.getRightX())
+      () -> driverController.getRightX(),
+      0.75)
     );
   }
 
@@ -114,10 +120,10 @@ public class RobotContainer {
 
     // On high extend home, angle home, extend position, angle position
     // buttonBoard.button(10).or(driverController.y()).toggleOnTrue(new ExtendHome(armExtend).andThen(new AngleHome(armAngle)).andThen(new ExtendHigh(armExtend).until( () -> (driverController.getRightTriggerAxis() > 0.2) || driverController.getLeftTriggerAxis() > 0.2).andThen(new AngleHigh(armAngle))));
-    buttonBoard.button(10).toggleOnTrue(new ExtendHome(armExtend).andThen(new AngleHigh(armAngle)).andThen(new ExtendHigh(armExtend)).andThen(new AngleMed(armAngle)));
+    buttonBoard.button(10).toggleOnTrue(new ExtendHome(armExtend).andThen(new AngleHigh(armAngle)).andThen(new ExtendHigh(armExtend)).andThen(new WaitCommand(1)).andThen(new AngleMed(armAngle)));
     buttonBoard.button(9).or(driverController.b()).toggleOnTrue(new ExtendHome(armExtend).andThen(new AngleHigh(armAngle)).andThen(new ExtendMed(armExtend).until( () -> (driverController.getRightTriggerAxis() > 0.2) || driverController.getLeftTriggerAxis() > 0.2)).andThen(new AngleMed(armAngle)));
     buttonBoard.button(8).or(driverController.a()).toggleOnTrue(new ExtendHome(armExtend).andThen(new AngleLow(armAngle)).andThen(new ExtendLow(armExtend).until( () -> (driverController.getRightTriggerAxis() > 0.2) || driverController.getLeftTriggerAxis() > 0.2)));
-    buttonBoard.button(7).or(driverController.x()).toggleOnTrue(new ExtendHome(armExtend).andThen(new AngleHome(armAngle)).andThen(new ExtendHome(armExtend)));
+    buttonBoard.button(7).or(driverController.x()).toggleOnTrue(new AngleHome(armAngle).andThen(new ExtendHome(armExtend)));//.andThen(new ExtendHome(armExtend)));
     // buttonBoard.button(10).whileTrue(new ExtendHome(armExtend).andThen(new AngleHome(armAngle)));
     // buttonBoard.button(9).whileTrue(new ExtendMed(armExtend));
     // buttonBoard.button(8).whileTrue(new ExtendLow(armExtend));
@@ -127,6 +133,9 @@ public class RobotContainer {
     buttonBoard.button(3).or(driverController.povRight()).toggleOnTrue(new RotateRight(armRotate));
     buttonBoard.button(4).or(driverController.povUp()).toggleOnTrue(new RotateHome(armRotate));
     driverController.y().toggleOnTrue(new ExtendHome(armExtend).andThen(new AngleIntake(armAngle)).andThen(new ExtendIntake(armExtend)));
+    //buttonBoard.button(5).whileTrue(new Balance(driveSubsystem));
+    buttonBoard.button(5).whileTrue(new RotateManualPosition(armRotate, false));
+    buttonBoard.button(6).whileTrue(new RotateManualPosition(armRotate, true));
     // buttonBoard.button(10).whileTrue(new ArmFrontHigh(armAngle, armExtend, armRotate));
     // buttonBoard.button(9).whileTrue(new ArmFrontMed(armAngle, armExtend, armRotate));
     // buttonBoard.button(8).whileTrue(new ArmFrontLow(armAngle, armExtend, armRotate));
@@ -158,10 +167,13 @@ public class RobotContainer {
     // // button 10 is back high
     // buttonBoard.button(10).whileTrue(new ArmBackHigh(armAngle, armExtend, armRotate));
     // // button 11 is open
-    buttonBoard.button(11).or(driverController.leftBumper()).whileTrue(new ClawMove(claw, true));
+    buttonBoard.button(11).whileTrue(new ClawMove(claw, true));
     // // button 12 is close
-    buttonBoard.button(12).or(driverController.rightBumper()).whileTrue(new ClawMove(claw, false));
-
+    buttonBoard.button(12).whileTrue(new ClawMove(claw, false));
+    driverController.leftBumper().whileTrue(new DefaultDrive(driveSubsystem, () -> driverController.getLeftY(), () -> driverController.getRightX(), 0.5));
+    driverController.rightBumper().whileTrue(new DefaultDrive(driveSubsystem, () -> driverController.getLeftY(), () -> driverController.getRightX(), 1));
+    //buttonBoard.button(5).whileTrue(new SetColor(null, 0.91));
+    //buttonBoard.button(6).whileTrue(new SetColor(null, 0.69));
   }
 
   /**
@@ -171,6 +183,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return new ConeMove(driveSubsystem, armExtend, armRotate, armAngle, claw); // Pssssst Put auton command hereeeee (Almost guaranteed to be a sequential command group)
+   //return new ConeRampMove(driveSubsystem, armExtend, armRotate, armAngle, claw); // Pssssst Put auton command hereeeee (Almost guaranteed to be a sequential command group)
+   return new ConeMove(driveSubsystem, armExtend, armRotate, armAngle, claw); // Pssssst Put auton command hereeeee (Almost guaranteed to be a sequential command group)
   }
 }
