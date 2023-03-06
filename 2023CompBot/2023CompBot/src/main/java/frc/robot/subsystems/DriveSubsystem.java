@@ -84,6 +84,10 @@ public class DriveSubsystem extends SubsystemBase{
         driveTrain.arcadeDrive(x, z);
     }
 
+    public void drive(double x, double z, boolean squareInputs) {
+        driveTrain.arcadeDrive(x, z, squareInputs);
+    }
+
     public double getDriveFF(){
         return driveFeedForward;
     }
