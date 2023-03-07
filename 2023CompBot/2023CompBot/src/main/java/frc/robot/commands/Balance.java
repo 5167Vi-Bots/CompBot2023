@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class Balance extends CommandBase {
     
         private DriveSubsystem driveSubsystem;
-        private final double kP = 0.03;
+        private final double kP = 0.1;
         private double error;
         private double output;
 
@@ -29,72 +29,47 @@ public class Balance extends CommandBase {
     
         @Override
         public void execute() {
-            System.out.println("Running Balance");
-            //-17 is initial ramp, -11/10 is on top but not balanced
-             double currentPitch = driveSubsystem.getPitch();
-            if (currentPitch > 2.5 && currentPitch < 15)
-                driveSubsystem.drive(.30, 0);
-            if(currentPitch < -2.5 && currentPitch > -15)
-                driveSubsystem.drive(-.0, 0);
-            if(currentPitch < 2.5 && currentPitch > -1)
-                driveSubsystem.drive(0,0);
-            if (currentPitch < -15)
-                driveSubsystem.drive(-.4, 0);
-            if (currentPitch > 15)
-                driveSubsystem.drive(.4,0);
+        
 
-            // error = -(currentPitch- -1);
-            
-            // driveSubsystem.drive(error * kP, 0);
+            error = 0 - driveSubsystem.getPitch();
+            output = error * kP;
+            if(output >= 0.35){//0.45
+                output = 0.35;//0.45
+            }
+            else if(output <= -0.35){//0.45
+                output = -0.35;//0.45
+            }
+            driveSubsystem.drive(-output, 0);
 
-            // while (!isFinished())
-            // {
-            //     double currentPitch = driveSubsystem.getPitch();
-            //     if (currentPitch> 1 && currentPitch < 15)
-            //         driveSubsystem.drive(.35, 0);
-            //     if(currentPitch < -1 && currentPitch > -15)
-            //         driveSubsystem.drive(-.35, 0);
-            //     if(currentPitch < 1 && currentPitch > -1)
-            //         driveSubsystem.drive(0,0);
-            //     if (currentPitch < -15)
-            //         driveSubsystem.drive(-.5, 0);
-            //     if (currentPitch > 15)
-            //         driveSubsystem.drive(.5,0);
-                
-            // }
-            // Timer t = new Timer();
-
-            // try {
-            //     t.wait(100, 0);
-            // } catch (InterruptedException e) { }
-        }
-    
-        @Override
-        public void end(boolean interrupted) {
-            driveSubsystem.drive(0, 0);
+          
         }
 
-        int i = 0;
         @Override
         public boolean isFinished()
         {
-            boolean isBalanced = false;
-            double currentPitch =  driveSubsystem.getPitch();
-            if (currentPitch > 0 && currentPitch < 1)
-                isBalanced = true;
-            if (currentPitch < 0 && currentPitch > -1)
-                isBalanced = true;
+            // boolean isBalanced = false;
+            // double currentPitch =  driveSubsystem.getPitch();
+            // if (currentPitch > 0 && currentPitch < 1)
+            //     isBalanced = true;
+            // if (currentPitch < 0 && currentPitch > -1)
+            //     isBalanced = true;
 
-            if (!isBalanced)
-                i=0;
-            if (isBalanced && i < 100)
-            {
-                driveSubsystem.drive(0,0);
-                i++;
-                return false;
-            }
-            //Return true when pidegon reports balanced
-            return isBalanced;
+            // if (!isBalanced)
+            //     i=0;
+            // if (isBalanced && i < 100)
+            // {
+            //     driveSubsystem.drive(0,0);
+            //     i++;
+            //     return false;
+            // }
+            // //Return true when pidegon reports balanced
+            // return isBalanced;
+            return false;
+        }
+
+        @Override
+        public void end(boolean interrupted) {
+            driveSubsystem.drive(0, 0);
         }
         
 }

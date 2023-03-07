@@ -117,13 +117,13 @@ public class RobotContainer {
     driverController.axisGreaterThan(2, 0.2).whileTrue(new ExtendManualPosition(armExtend, false));
     // driverController.axisGreaterThan(3, 0.2).whileTrue(new LimeDrive(limelight, driveSubsystem, PipeType.CONE));//.whileTrue(new ExtendManualPosition(armExtend, true));
 
-
+    driverController.b().whileTrue(new Balance(driveSubsystem));
     // On high extend home, angle home, extend position, angle position
     // buttonBoard.button(10).or(driverController.y()).toggleOnTrue(new ExtendHome(armExtend).andThen(new AngleHome(armAngle)).andThen(new ExtendHigh(armExtend).until( () -> (driverController.getRightTriggerAxis() > 0.2) || driverController.getLeftTriggerAxis() > 0.2).andThen(new AngleHigh(armAngle))));
     buttonBoard.button(10).toggleOnTrue(new ExtendHome(armExtend).andThen(new AngleHigh(armAngle)).andThen(new ExtendHigh(armExtend)).andThen(new WaitCommand(1)).andThen(new AngleMed(armAngle)));
-    buttonBoard.button(9).or(driverController.b()).toggleOnTrue(new ExtendHome(armExtend).andThen(new AngleHigh(armAngle)).andThen(new ExtendMed(armExtend).until( () -> (driverController.getRightTriggerAxis() > 0.2) || driverController.getLeftTriggerAxis() > 0.2)).andThen(new AngleMed(armAngle)));
-    buttonBoard.button(8).or(driverController.a()).toggleOnTrue(new ExtendHome(armExtend).andThen(new AngleLow(armAngle)).andThen(new ExtendLow(armExtend).until( () -> (driverController.getRightTriggerAxis() > 0.2) || driverController.getLeftTriggerAxis() > 0.2)));
-    buttonBoard.button(7).or(driverController.x()).toggleOnTrue(new AngleHome(armAngle).andThen(new ExtendHome(armExtend)));//.andThen(new ExtendHome(armExtend)));
+    buttonBoard.button(9).toggleOnTrue(new ExtendHome(armExtend).andThen(new AngleHigh(armAngle)).andThen(new ExtendMed(armExtend).until( () -> (driverController.getRightTriggerAxis() > 0.2) || driverController.getLeftTriggerAxis() > 0.2)).andThen(new AngleMed(armAngle)));
+    buttonBoard.button(8).toggleOnTrue(new ExtendHome(armExtend).andThen(new AngleLow(armAngle)).andThen(new ExtendLow(armExtend).until( () -> (driverController.getRightTriggerAxis() > 0.2) || driverController.getLeftTriggerAxis() > 0.2)));
+    buttonBoard.button(7).toggleOnTrue(new AngleHome(armAngle).andThen(new ExtendHome(armExtend)));//.andThen(new ExtendHome(armExtend)));
     // buttonBoard.button(10).whileTrue(new ExtendHome(armExtend).andThen(new AngleHome(armAngle)));
     // buttonBoard.button(9).whileTrue(new ExtendMed(armExtend));
     // buttonBoard.button(8).whileTrue(new ExtendLow(armExtend));
