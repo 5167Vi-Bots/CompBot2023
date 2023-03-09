@@ -25,18 +25,8 @@ public class DefaultDrive extends CommandBase {
 
     @Override
     public void execute() {
-        driveSubsystem.drive(x.getAsDouble()*-speedLimit, SquareInputs(z.getAsDouble() *speedLimit)*-1);
-    }
-    
-    private double SquareInputs(double Input)
-    {
-        double SquaredInput = Input*Input;
-        boolean isNegative = Input < 0;
-
-        if (isNegative)
-        SquaredInput = SquaredInput * -1;
-
-        return SquaredInput;
+        // driveSubsystem.drive(x.getAsDouble()*-speedLimit, SquareInputs(z.getAsDouble() *speedLimit)*-1);
+        driveSubsystem.drive(x.getAsDouble()*-speedLimit, z.getAsDouble()*-speedLimit, true);
     }
 
     @Override
