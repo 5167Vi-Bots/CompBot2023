@@ -26,11 +26,12 @@ public class AngleLow extends CommandBase {
     @Override
     public void execute() {
         armAngle.low();
+        //System.out.println(armAngle.isMoving());
     }
 
     @Override
     public boolean isFinished() {
-        return !armAngle.isMoving() && timer.get() > 0.15;
+        return !armAngle.isMoving()  && armAngle.targetPosition() == armAngle.low; //&& timer.get() > 0.2; 
     }
 
     @Override

@@ -12,6 +12,11 @@ import frc.robot.Constants.Ports.ArmConstants;
 
 public class ArmExtend extends SubsystemBase{
     private WPI_TalonFX armExtend;
+    public double home = 0;
+    public double low = 0;
+    public double med = -76000;
+    public double high = -165400;
+    public double intake = -60000;
 
     public ArmExtend() {
         armExtend = new WPI_TalonFX(ArmConstants.kArmExtend);
@@ -19,12 +24,12 @@ public class ArmExtend extends SubsystemBase{
         armExtend.setNeutralMode(NeutralMode.Brake);
         armExtend.setInverted(false);
         armExtend.setSensorPhase(false);
-        armExtend.configClosedLoopPeakOutput(0, 0.6);
+        armExtend.configClosedLoopPeakOutput(0, 0.75); //0.6
         armExtend.config_kP(0, 0.1);
         armExtend.selectProfileSlot(0, 0);
         // Motion Magic Config
-        armExtend.configMotionAcceleration(7500);
-        armExtend.configMotionCruiseVelocity(7500);
+        armExtend.configMotionAcceleration(21000); //7500
+        armExtend.configMotionCruiseVelocity(23000); //7500
     }
 
     public void resetEncoder() {
@@ -33,7 +38,7 @@ public class ArmExtend extends SubsystemBase{
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Arm Extend Position", getPosition());
+        SmartDashboard.putNumber("Arm Extend Velocity", armExtend.getActiveTrajectoryVelocity());
         SmartDashboard.updateValues();
     }
 
@@ -58,7 +63,11 @@ public class ArmExtend extends SubsystemBase{
     }
 
     public boolean isMoving() {
-        return Math.abs(armExtend.getActiveTrajectoryVelocity()) > 100;
+        return Math.abs(Math.abs(armExtend.getClosedLoopTarget(0)) - Math.abs(armExtend.getSelectedSensorPosition(0))) > 1000;
+    }
+
+    public double targetPosition() {
+        return armExtend.getClosedLoopTarget(0);
     }
 
     public void home(){

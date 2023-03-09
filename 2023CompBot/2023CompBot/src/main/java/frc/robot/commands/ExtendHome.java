@@ -24,11 +24,12 @@ public class ExtendHome extends CommandBase{
     @Override
     public void execute() {
         armExtend.home();
+        System.out.println(armExtend.isMoving());
     }
 
     @Override
     public boolean isFinished() {
-        return !armExtend.isMoving() && timer.get() > 0.15;
+        return !armExtend.isMoving() && armExtend.targetPosition() == armExtend.home;
     }
 
     @Override

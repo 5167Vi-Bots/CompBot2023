@@ -30,9 +30,8 @@ public class AngleMed extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return !armAngle.isMoving() && timer.get() > 0.15;
+        return !armAngle.isMoving()  && armAngle.targetPosition() == armAngle.med;
     }
-
     @Override
     public void end(boolean interrupted) {
         // armAngle.stop(); // Possibly?

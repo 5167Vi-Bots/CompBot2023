@@ -30,7 +30,7 @@ public class AngleHome extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return !armAngle.isMoving() && timer.get() > 0.15;
+        return !armAngle.isMoving()  && armAngle.targetPosition() == armAngle.home;
     }
 
     @Override

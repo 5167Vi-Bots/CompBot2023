@@ -28,7 +28,7 @@ public class ExtendIntake extends CommandBase{
 
     @Override
     public boolean isFinished() {
-        return !armExtend.isMoving() && timer.get() > 0.15;
+        return !armExtend.isMoving() && armExtend.targetPosition() == armExtend.intake;
     }
 
     @Override

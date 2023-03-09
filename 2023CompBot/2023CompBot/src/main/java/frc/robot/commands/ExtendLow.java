@@ -28,7 +28,7 @@ public class ExtendLow extends CommandBase{
 
     @Override
     public boolean isFinished() {
-        return !armExtend.isMoving() && timer.get() > 0.15;
+        return !armExtend.isMoving() && armExtend.targetPosition() == armExtend.low;
     }
 
     @Override

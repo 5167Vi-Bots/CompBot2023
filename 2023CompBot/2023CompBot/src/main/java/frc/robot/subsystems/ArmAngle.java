@@ -11,6 +11,11 @@ import static frc.robot.Constants.Ports.ArmConstants;
 
 public class ArmAngle extends SubsystemBase{
     private WPI_TalonFX armAngle;
+    public double home = 0;
+    public double low = -82500;
+    public double med = -43500;
+    public double high = -39500;
+    public double intake = -33800;
 
     public ArmAngle() {
         armAngle = new WPI_TalonFX(ArmConstants.kArmAngle);
@@ -18,10 +23,10 @@ public class ArmAngle extends SubsystemBase{
         armAngle.setNeutralMode(NeutralMode.Brake);
         armAngle.setInverted(true);
         armAngle.setSensorPhase(true);
-        armAngle.configClosedLoopPeakOutput(0, 0.6);
+        armAngle.configClosedLoopPeakOutput(0, 0.75); //0.6
         armAngle.selectProfileSlot(0, 0);
-        armAngle.configMotionAcceleration(5000);
-        armAngle.configMotionCruiseVelocity(6000);
+        armAngle.configMotionAcceleration(12000); //5000 
+        armAngle.configMotionCruiseVelocity(14000); //6000
         armAngle.config_kP(0, 0.1);
     }
 
@@ -53,7 +58,11 @@ public class ArmAngle extends SubsystemBase{
     }
 
     public boolean isMoving() {
-        return Math.abs(armAngle.getActiveTrajectoryVelocity()) > 100;
+        return Math.abs(Math.abs(armAngle.getClosedLoopTarget()) - Math.abs(armAngle.getSelectedSensorPosition(0))) > 5000;
+    }
+
+    public double targetPosition() {
+        return armAngle.getClosedLoopTarget(0);
     }
 
     public void stop() {
