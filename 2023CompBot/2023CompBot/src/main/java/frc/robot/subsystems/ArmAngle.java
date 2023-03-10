@@ -87,7 +87,7 @@ public class ArmAngle extends SubsystemBase{
     }
 
     public void intake() {
-        doMagic(-33800);
+        doMagic(-33000); //-33800
     }
 
 

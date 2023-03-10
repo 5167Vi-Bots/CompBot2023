@@ -4,6 +4,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CamMode;
 import frc.robot.Constants.LedMode;
@@ -35,6 +36,14 @@ public class LimelightSubsystem extends SubsystemBase{
         
         limelightDriveCommand = 0.0;
         limelightSteerCommand = 0.0;
+    }
+
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber("tx", getX());
+        SmartDashboard.putNumber("ty", getY());
+        SmartDashboard.putNumber("limelightDrive", limelightDriveCommand);
+        SmartDashboard.putNumber("limelightSteer", limelightSteerCommand);
     }
 
     /* Visible Values (tv)
@@ -73,9 +82,9 @@ public class LimelightSubsystem extends SubsystemBase{
     public PipeType getPipe() {
         switch((int)pipeline.getDouble(0)) {
             case 0:
-                return PipeType.CONE;
-            case 1:
                 return PipeType.CUBE;
+            case 1:
+                return PipeType.CONE;
             case 2:
                 return PipeType.INTAKE;
             case 3:
@@ -101,10 +110,10 @@ public class LimelightSubsystem extends SubsystemBase{
      */
     public void setPipe(PipeType pipeType) {
         switch(pipeType) {
-            case CONE:
+            case CUBE:
                 pipeline.setDouble(0);
                 break;
-            case CUBE:
+            case CONE:
                 pipeline.setDouble(1);
                 break;
             case INTAKE:
@@ -223,7 +232,7 @@ public class LimelightSubsystem extends SubsystemBase{
     }
 
     public boolean doneTargeting() {
-        if (Math.abs(getX()) > k_minError || Math.abs(getY()) > k_minError) {
+        if (Math.abs(getX()) > k_minError || Math.abs(getY()) > k_minError+5) {
             return false;
         }
         return true;

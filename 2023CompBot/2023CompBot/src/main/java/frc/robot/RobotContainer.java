@@ -62,7 +62,8 @@ import frc.robot.subsystems.LimelightSubsystem;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveSubsystem driveSubsystem = new DriveSubsystem();
-  private final LimelightSubsystem limelight = new LimelightSubsystem("limelight-jimmy", 0.027, 0.025, 0.5, .5, true, true);
+  private final LimelightSubsystem limelightJimmy = new LimelightSubsystem("limelight-jimmy", 0.027, 0.025, 0.5, .5, true, true);
+  private final LimelightSubsystem limelightJerry = new LimelightSubsystem("limelight-jerry", 0.015, 0.01, 1.25, .7, false, true);
   private final ArmExtend armExtend = new ArmExtend();
   private final ArmRotate armRotate = new ArmRotate();
   private final ArmAngle armAngle = new ArmAngle();
@@ -121,9 +122,9 @@ public class RobotContainer {
     // On high extend home, angle home, extend position, angle position
     // buttonBoard.button(10).or(driverController.y()).toggleOnTrue(new ExtendHome(armExtend).andThen(new AngleHome(armAngle)).andThen(new ExtendHigh(armExtend).until( () -> (driverController.getRightTriggerAxis() > 0.2) || driverController.getLeftTriggerAxis() > 0.2).andThen(new AngleHigh(armAngle))));
     buttonBoard.button(10).toggleOnTrue(new ExtendHome(armExtend).andThen(new AngleHigh(armAngle)).andThen(new ExtendHigh(armExtend)).andThen(new WaitCommand(1)).andThen(new AngleMed(armAngle)));
-    buttonBoard.button(9).or(driverController.b()).toggleOnTrue(new ExtendHome(armExtend).andThen(new AngleHigh(armAngle)).andThen(new ExtendMed(armExtend).andThen(new AngleMed(armAngle))));
-    buttonBoard.button(8).or(driverController.a()).toggleOnTrue(new ExtendHome(armExtend).andThen(new AngleLow(armAngle)).andThen(new ExtendLow(armExtend)));
-    buttonBoard.button(7).or(driverController.x()).toggleOnTrue(new ExtendHome(armExtend).andThen(new AngleHome(armAngle)));//.andThen(new ExtendHome(armExtend)));
+    buttonBoard.button(9).toggleOnTrue(new ExtendHome(armExtend).andThen(new AngleHigh(armAngle)).andThen(new ExtendMed(armExtend).andThen(new AngleMed(armAngle))));
+    buttonBoard.button(8).toggleOnTrue(new ExtendHome(armExtend).andThen(new AngleLow(armAngle)).andThen(new ExtendLow(armExtend)));
+    buttonBoard.button(7).toggleOnTrue(new ExtendHome(armExtend).andThen(new AngleHome(armAngle)));//.andThen(new ExtendHome(armExtend)));
     // buttonBoard.button(10).whileTrue(new ExtendHome(armExtend).andThen(new AngleHome(armAngle)));
     // buttonBoard.button(9).whileTrue(new ExtendMed(armExtend));
     // buttonBoard.button(8).whileTrue(new ExtendLow(armExtend));
@@ -132,8 +133,9 @@ public class RobotContainer {
     buttonBoard.button(1).or(driverController.povDown()).toggleOnTrue(new RotateBack(armRotate));
     buttonBoard.button(3).or(driverController.povRight()).toggleOnTrue(new RotateRight(armRotate));
     buttonBoard.button(4).or(driverController.povUp()).toggleOnTrue(new RotateHome(armRotate));
-    driverController.y().toggleOnTrue(new ExtendHome(armExtend).andThen(new AngleIntake(armAngle)).andThen(new ExtendIntake(armExtend)));
+    driverController.y().toggleOnTrue(new AngleIntake(armAngle)); //(new ExtendHome(armExtend).andThen(new ExtendIntake(armExtend)))
     //buttonBoard.button(5).whileTrue(new Balance(driveSubsystem));
+    driverController.a().whileTrue(new LimeDrive(limelightJerry, driveSubsystem, PipeType.CUBE).andThen(new ClawMove(claw, true)));
     buttonBoard.button(5).whileTrue(new RotateManualPosition(armRotate, false));
     buttonBoard.button(6).whileTrue(new RotateManualPosition(armRotate, true));
     // buttonBoard.button(10).whileTrue(new ArmFrontHigh(armAngle, armExtend, armRotate));
