@@ -232,21 +232,26 @@ public class LimelightSubsystem extends SubsystemBase{
     }
 
     public boolean doneTargeting() {
-        if (Math.abs(getX()) > k_minError || Math.abs(getY()) > k_minError+5) {
+        if ((Math.abs(getX()) > k_minError || Math.abs(getY()) > k_minError+7)) {
             return false;
         }
-        return true;
+        if (hasTarget()) {
+            return true;
+        } else {
+            return false;
+        }
+        
     }
 
     public void updateTracking(double fwd, double strafe, DriveSubsystem driveTrain) {
         
         // // Check if we have target before trying to follow a target
-        // if (!this.hasTarget()) {
-        //   limelightDriveCommand = 0.0;
-        //   limelightSteerCommand = 0.35;
-        //   driveTrain.drive(limelightDriveCommand, limelightSteerCommand); // Safely rotate until we see a target while trying to target
-        //   return; // return allows us to exit the function at this point without unnecessarily executing code below
-        // }
+        if (!this.hasTarget()) {
+          limelightDriveCommand = 0.0;
+          limelightSteerCommand = 0.35;
+          driveTrain.drive(limelightDriveCommand, limelightSteerCommand); // Safely rotate until we see a target while trying to target
+          return; // return allows us to exit the function at this point without unnecessarily executing code below
+        }
 
         // driveTrain.drive(0, 0);
 

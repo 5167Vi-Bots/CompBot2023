@@ -136,6 +136,7 @@ public class RobotContainer {
     driverController.y().toggleOnTrue(new AngleIntake(armAngle)); //(new ExtendHome(armExtend).andThen(new ExtendIntake(armExtend)))
     //buttonBoard.button(5).whileTrue(new Balance(driveSubsystem));
     driverController.a().whileTrue(new LimeDrive(limelightJerry, driveSubsystem, PipeType.CUBE).andThen(new ClawMove(claw, true)));
+    driverController.b().whileTrue(new LimeDrive(limelightJerry, driveSubsystem, PipeType.CONE).andThen(new ClawMove(claw, true)));
     buttonBoard.button(5).whileTrue(new RotateManualPosition(armRotate, false));
     buttonBoard.button(6).whileTrue(new RotateManualPosition(armRotate, true));
     // buttonBoard.button(10).whileTrue(new ArmFrontHigh(armAngle, armExtend, armRotate));
@@ -186,6 +187,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
    //return new ConeRampMove(driveSubsystem, armExtend, armRotate, armAngle, claw); // Pssssst Put auton command hereeeee (Almost guaranteed to be a sequential command group)
-   return new ConeMove(driveSubsystem, armExtend, armRotate, armAngle, claw); // Pssssst Put auton command hereeeee (Almost guaranteed to be a sequential command group)
+   //return new ConeMove(driveSubsystem, armExtend, armRotate, armAngle, claw); // Pssssst Put auton command hereeeee (Almost guaranteed to be a sequential command group)
+   return new ConeRampMove(driveSubsystem, armExtend, armRotate, armAngle, claw);
   }
 }
