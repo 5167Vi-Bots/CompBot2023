@@ -28,11 +28,11 @@ public class Balance extends CommandBase {
 
             error = 0 - driveSubsystem.getPitch();
             output = error * kP;
-            if(output >= 0.35){//0.45
-                output = 0.35;//0.45
+            if(output >= 0.30){//0.45
+                output = 0.30;//0.45
             }
-            else if(output <= -0.35){//0.45
-                output = -0.35;//0.45
+            else if(output <= -0.30){//0.45
+                output = -0.30;//0.45
             }
             driveSubsystem.drive(-output, 0);
 

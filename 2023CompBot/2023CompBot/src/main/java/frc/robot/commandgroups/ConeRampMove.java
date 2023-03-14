@@ -40,10 +40,8 @@ public class ConeRampMove extends SequentialCommandGroup {
                 new AngleHome(armAngle),
                 new WaitCommand(0.5),
                 // Movement ah
-                new DriveDistance(driveSubsystem, -160),
-                new WaitCommand(0.5),
-                new DriveDistance(driveSubsystem, 87),
-                new WaitCommand(0.25),
+                new DriveDistance(driveSubsystem, -86),
+              
                 new Balance(driveSubsystem)
                 
 
