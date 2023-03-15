@@ -232,7 +232,7 @@ public class LimelightSubsystem extends SubsystemBase{
     }
 
     public boolean doneTargeting() {
-        if ((Math.abs(getX()) > k_minError || Math.abs(getY()) > k_minError+7)) {
+        if ((Math.abs(getX()) > k_minError || Math.abs(getY()) > k_minError)) { // getYkminError+7
             return false;
         }
         if (hasTarget()) {

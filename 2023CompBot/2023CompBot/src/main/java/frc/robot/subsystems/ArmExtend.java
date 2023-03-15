@@ -28,8 +28,8 @@ public class ArmExtend extends SubsystemBase{
         armExtend.config_kP(0, 0.1);
         armExtend.selectProfileSlot(0, 0);
         // Motion Magic Config
-        armExtend.configMotionAcceleration(21000); //7500
-        armExtend.configMotionCruiseVelocity(23000); //7500
+        armExtend.configMotionAcceleration(23000); //7500
+        armExtend.configMotionCruiseVelocity(25000); //7500
     }
 
     public void resetEncoder() {

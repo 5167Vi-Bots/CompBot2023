@@ -22,8 +22,8 @@ public class ArmRotate extends SubsystemBase{
         armRotate.setSensorPhase(false);
         armRotate.configClosedLoopPeakOutput(0, 0.6);
         armRotate.selectProfileSlot(0, 0);
-        armRotate.configMotionAcceleration(10000); //1500
-        armRotate.configMotionCruiseVelocity(12000); //3000
+        armRotate.configMotionAcceleration(12000); //1500
+        armRotate.configMotionCruiseVelocity(14000); //3000
         armRotate.config_kP(0, 0.1); // 0.5
         armRotate.configForwardSoftLimitEnable(false);
         armRotate.configReverseSoftLimitEnable(false);

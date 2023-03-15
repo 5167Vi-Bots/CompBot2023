@@ -21,15 +21,15 @@ import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class ConeRampMove extends SequentialCommandGroup {
-    public ConeRampMove(DriveSubsystem driveSubsystem, ArmExtend armExtend, ArmRotate armRotate, ArmAngle armAngle,
-            Claw claw) {
+    public ConeRampMove(DriveSubsystem driveSubsystem, ArmExtend armExtend, ArmRotate armRotate, ArmAngle armAngle, Claw claw) {
         addCommands(
-
+                //new ClawMove(claw, true),
+                new WaitCommand(0.15),
                 new AngleHome(armAngle),
                 new ExtendHome(armExtend),
                 new RotateHome(armRotate),
                 // Send to High
-                //new ExtendMed(armExtend),
+        
                 new AngleHigh(armAngle),
                 new ExtendHigh(armExtend),
                 new AngleMed(armAngle),
@@ -39,8 +39,8 @@ public class ConeRampMove extends SequentialCommandGroup {
                 new ExtendHome(armExtend),
                 new AngleHome(armAngle),
                 new WaitCommand(0.5),
-                // Movement ah
-                new DriveDistance(driveSubsystem, -86),
+                // // Movement ah
+                new DriveDistance(driveSubsystem, -89),
               
                 new Balance(driveSubsystem)
                 

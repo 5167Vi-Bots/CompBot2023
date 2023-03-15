@@ -28,6 +28,7 @@ import frc.robot.commands.AngleHigh;
 import frc.robot.commands.AngleHome;
 import frc.robot.commands.AngleIntake;
 import frc.robot.commands.AngleLow;
+import frc.robot.commands.AngleManualPosition;
 import frc.robot.commands.AngleMed;
 import frc.robot.commands.Balance;
 import frc.robot.commands.ClawMove;
@@ -121,7 +122,7 @@ public class RobotContainer {
 
     // On high extend home, angle home, extend position, angle position
     // buttonBoard.button(10).or(driverController.y()).toggleOnTrue(new ExtendHome(armExtend).andThen(new AngleHome(armAngle)).andThen(new ExtendHigh(armExtend).until( () -> (driverController.getRightTriggerAxis() > 0.2) || driverController.getLeftTriggerAxis() > 0.2).andThen(new AngleHigh(armAngle))));
-    buttonBoard.button(10).toggleOnTrue(new ExtendHome(armExtend).andThen(new AngleHigh(armAngle)).andThen(new ExtendHigh(armExtend)).andThen(new WaitCommand(1)).andThen(new AngleMed(armAngle)));
+    buttonBoard.button(10).toggleOnTrue(new ExtendHome(armExtend).andThen(new AngleHigh(armAngle)).andThen(new ExtendHigh(armExtend)).andThen(new WaitCommand(1)));
     buttonBoard.button(9).toggleOnTrue(new ExtendHome(armExtend).andThen(new AngleHigh(armAngle)).andThen(new ExtendMed(armExtend).andThen(new AngleMed(armAngle))));
     buttonBoard.button(8).toggleOnTrue(new ExtendHome(armExtend).andThen(new AngleLow(armAngle)).andThen(new ExtendLow(armExtend)));
     buttonBoard.button(7).toggleOnTrue(new ExtendHome(armExtend).andThen(new AngleHome(armAngle)));//.andThen(new ExtendHome(armExtend)));
@@ -133,12 +134,15 @@ public class RobotContainer {
     buttonBoard.button(1).or(driverController.povDown()).toggleOnTrue(new RotateBack(armRotate));
     buttonBoard.button(3).or(driverController.povRight()).toggleOnTrue(new RotateRight(armRotate));
     buttonBoard.button(4).or(driverController.povUp()).toggleOnTrue(new RotateHome(armRotate));
-    driverController.y().toggleOnTrue(new AngleIntake(armAngle)); //(new ExtendHome(armExtend).andThen(new ExtendIntake(armExtend)))
+    driverController.y().whileTrue(new AngleIntake(armAngle)); //(new ExtendHome(armExtend).andThen(new ExtendIntake(armExtend)))
+    driverController.x().whileTrue(new LimeDrive(limelightJimmy, driveSubsystem, PipeType.INTAKE));
     //buttonBoard.button(5).whileTrue(new Balance(driveSubsystem));
     driverController.a().whileTrue(new LimeDrive(limelightJerry, driveSubsystem, PipeType.CUBE).andThen(new ClawMove(claw, true)));
     driverController.b().whileTrue(new LimeDrive(limelightJerry, driveSubsystem, PipeType.CONE).andThen(new ClawMove(claw, true)));
     buttonBoard.button(5).whileTrue(new RotateManualPosition(armRotate, false));
     buttonBoard.button(6).whileTrue(new RotateManualPosition(armRotate, true));
+    buttonBoard.axisGreaterThan(1, .2).whileTrue(new AngleManualPosition(armAngle, false));
+    buttonBoard.axisLessThan(1, -.2).whileTrue(new AngleManualPosition(armAngle, true));
     // buttonBoard.button(10).whileTrue(new ArmFrontHigh(armAngle, armExtend, armRotate));
     // buttonBoard.button(9).whileTrue(new ArmFrontMed(armAngle, armExtend, armRotate));
     // buttonBoard.button(8).whileTrue(new ArmFrontLow(armAngle, armExtend, armRotate));
