@@ -63,7 +63,7 @@ import frc.robot.subsystems.LimelightSubsystem;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveSubsystem driveSubsystem = new DriveSubsystem();
-  private final LimelightSubsystem limelightJimmy = new LimelightSubsystem("limelight-jimmy", 0.027, 0.025, 0.5, .5, true, true);
+  private final LimelightSubsystem limelightJimmy = new LimelightSubsystem("limelight-jimmy", 0.015, 0.012, 0.5, .5, true, true);
   private final LimelightSubsystem limelightJerry = new LimelightSubsystem("limelight-jerry", 0.015, 0.01, 1.25, .7, false, true);
   private final ArmExtend armExtend = new ArmExtend();
   private final ArmRotate armRotate = new ArmRotate();

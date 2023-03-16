@@ -21,7 +21,7 @@ public class DriveSubsystem extends SubsystemBase{
     private DifferentialDrive driveTrain;
     private WPI_TalonFX frontLeft, frontRight, backLeft, backRight;
     //private final double ticksPerInch = 2048; //1365 208
-    private final double driveFeedForward = 0.345;// 0.235 does move 0.225 doesn't
+    private final double driveFeedForward = 0.235;// 0.235 does move 0.225 doesn't
     private final double steerFeedForward = 0.16; // 0.24, 0.16
     private final double drive_kP = 0.03;
     private final double steer_kP = 0.03;

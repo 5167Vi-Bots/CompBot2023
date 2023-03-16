@@ -13,6 +13,7 @@ import frc.robot.commands.DriveOntoRamp;
 import frc.robot.commands.ExtendHigh;
 import frc.robot.commands.ExtendHome;
 import frc.robot.commands.ExtendMed;
+import frc.robot.commands.RotateBack;
 import frc.robot.commands.RotateHome;
 import frc.robot.subsystems.ArmAngle;
 import frc.robot.subsystems.ArmExtend;
@@ -42,7 +43,7 @@ public class ConeRampMove extends SequentialCommandGroup {
                 // // Movement ah
                 new DriveDistance(driveSubsystem, -89),
               
-                new Balance(driveSubsystem)
+                new Balance(driveSubsystem).alongWith(new RotateBack(armRotate))
                 
 
         // // new DriveOntoRamp(driveSubsystem, true),
