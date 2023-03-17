@@ -30,6 +30,7 @@ import frc.robot.commands.AngleIntake;
 import frc.robot.commands.AngleLow;
 import frc.robot.commands.AngleManualPosition;
 import frc.robot.commands.AngleMed;
+import frc.robot.commands.ArmRotateTrack;
 import frc.robot.commands.Balance;
 import frc.robot.commands.ClawMove;
 import frc.robot.commands.DefaultDrive;
@@ -125,7 +126,7 @@ public class RobotContainer {
     buttonBoard.button(10).toggleOnTrue(new ExtendHome(armExtend).andThen(new AngleHigh(armAngle)).andThen(new ExtendHigh(armExtend)).andThen(new WaitCommand(1)));
     buttonBoard.button(9).toggleOnTrue(new ExtendHome(armExtend).andThen(new AngleHigh(armAngle)).andThen(new ExtendMed(armExtend).andThen(new AngleMed(armAngle))));
     buttonBoard.button(8).toggleOnTrue(new ExtendHome(armExtend).andThen(new AngleLow(armAngle)).andThen(new ExtendLow(armExtend)));
-    buttonBoard.button(7).toggleOnTrue(new ExtendHome(armExtend).andThen(new AngleHome(armAngle)));//.andThen(new ExtendHome(armExtend)));
+    buttonBoard.button(7).toggleOnTrue(new ExtendHome(armExtend).withTimeout(3).andThen(new AngleHome(armAngle)));//.andThen(new ExtendHome(armExtend)));
     // buttonBoard.button(10).whileTrue(new ExtendHome(armExtend).andThen(new AngleHome(armAngle)));
     // buttonBoard.button(9).whileTrue(new ExtendMed(armExtend));
     // buttonBoard.button(8).whileTrue(new ExtendLow(armExtend));
@@ -135,7 +136,7 @@ public class RobotContainer {
     buttonBoard.button(3).or(driverController.povRight()).toggleOnTrue(new RotateRight(armRotate));
     buttonBoard.button(4).or(driverController.povUp()).toggleOnTrue(new RotateHome(armRotate));
     driverController.y().whileTrue(new AngleIntake(armAngle)); //(new ExtendHome(armExtend).andThen(new ExtendIntake(armExtend)))
-    driverController.x().whileTrue(new LimeDrive(limelightJimmy, driveSubsystem, PipeType.INTAKE));
+    driverController.x().whileTrue(new LimeDrive(limelightJimmy, driveSubsystem, PipeType.INTAKE).alongWith(new ArmRotateTrack(armRotate)));
     //buttonBoard.button(5).whileTrue(new Balance(driveSubsystem));
     driverController.a().whileTrue(new LimeDrive(limelightJerry, driveSubsystem, PipeType.CUBE).andThen(new ClawMove(claw, true)));
     driverController.b().whileTrue(new LimeDrive(limelightJerry, driveSubsystem, PipeType.CONE).andThen(new ClawMove(claw, true)));
