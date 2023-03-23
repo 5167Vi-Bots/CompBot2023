@@ -1,5 +1,6 @@
 package frc.robot.commandgroups;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.AngleHigh;
@@ -21,6 +22,7 @@ public class ConeMove extends SequentialCommandGroup {
     public ConeMove(DriveSubsystem driveSubsystem, ArmExtend armExtend, ArmRotate armRotate, ArmAngle armAngle, Claw claw) {
         addCommands(
             // Send Arm Home
+            new InstantCommand(() -> claw.close()).withTimeout(0.5),
             new AngleHome(armAngle),
             new ExtendHome(armExtend),
             new RotateHome(armRotate),
@@ -30,7 +32,7 @@ public class ConeMove extends SequentialCommandGroup {
             new AngleMed(armAngle),
             new WaitCommand(2),
             // Drop piece
-            new ClawMove(claw, false).withTimeout(1),
+            new InstantCommand(() -> claw.open()).withTimeout(1),
             new ExtendHome(armExtend),
             new AngleHome(armAngle),
             new WaitCommand(2),

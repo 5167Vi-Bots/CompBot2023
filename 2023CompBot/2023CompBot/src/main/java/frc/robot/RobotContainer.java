@@ -4,40 +4,27 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.PipeType;
 import frc.robot.Constants.Ports.ControllerPorts;
-import frc.robot.commandgroups.ArmBackHigh;
-import frc.robot.commandgroups.ArmBackLow;
-import frc.robot.commandgroups.ArmBackMed;
-import frc.robot.commandgroups.ArmFrontHigh;
-import frc.robot.commandgroups.ArmFrontLow;
-import frc.robot.commandgroups.ArmFrontMed;
-import frc.robot.commandgroups.ArmHome;
-import frc.robot.commandgroups.ArmRightHigh;
-import frc.robot.commandgroups.ArmRightLow;
-import frc.robot.commandgroups.ArmRightMed;
-import frc.robot.commandgroups.ConeMove;
 import frc.robot.commandgroups.ConeRampMove;
+import frc.robot.commands.AngleDrop;
 import frc.robot.commands.AngleHigh;
 import frc.robot.commands.AngleHome;
 import frc.robot.commands.AngleIntake;
 import frc.robot.commands.AngleLow;
 import frc.robot.commands.AngleManualPosition;
 import frc.robot.commands.AngleMed;
-import frc.robot.commands.ArmRotateTrack;
-import frc.robot.commands.Balance;
+import frc.robot.commands.ClawAuto;
 import frc.robot.commands.ClawMove;
 import frc.robot.commands.DefaultDrive;
-import frc.robot.commands.DriveDistance;
 import frc.robot.commands.ExtendHigh;
 import frc.robot.commands.ExtendHome;
-import frc.robot.commands.ExtendIntake;
 import frc.robot.commands.ExtendLow;
 import frc.robot.commands.ExtendManualPosition;
 import frc.robot.commands.ExtendMed;
@@ -47,7 +34,6 @@ import frc.robot.commands.RotateHome;
 import frc.robot.commands.RotateLeft;
 import frc.robot.commands.RotateManualPosition;
 import frc.robot.commands.RotateRight;
-import frc.robot.commands.SetColor;
 import frc.robot.subsystems.ArmAngle;
 import frc.robot.subsystems.ArmExtend;
 import frc.robot.subsystems.ArmRotate;
@@ -87,6 +73,8 @@ public class RobotContainer {
       () -> driverController.getRightX(),
       0.75)
     );
+
+    // claw.setDefaultCommand(new ClawAuto(claw));
   }
 
   public void teleInit() {
@@ -127,7 +115,7 @@ public class RobotContainer {
     buttonBoard.button(9).toggleOnTrue(new ExtendHome(armExtend).andThen(new AngleHigh(armAngle)).andThen(new ExtendMed(armExtend).andThen(new AngleMed(armAngle))));
     buttonBoard.button(8).toggleOnTrue(new ExtendHome(armExtend).andThen(new AngleLow(armAngle)).andThen(new ExtendLow(armExtend)));
     buttonBoard.button(7).toggleOnTrue(new ExtendHome(armExtend).withTimeout(3).andThen(new AngleHome(armAngle)));//.andThen(new ExtendHome(armExtend)));
-    // buttonBoard.button(10).whileTrue(new ExtendHome(armExtend).andThen(new AngleHome(armAngle)));
+    // buttonBoard.button(10).whileTrue(new ExtendHome(armExtend).andThen(new AngleHome(armAngle)));75000
     // buttonBoard.button(9).whileTrue(new ExtendMed(armExtend));
     // buttonBoard.button(8).whileTrue(new ExtendLow(armExtend));
     // buttonBoard.button(7).whileTrue(new ExtendHome(armExtend));
@@ -136,14 +124,14 @@ public class RobotContainer {
     buttonBoard.button(3).or(driverController.povRight()).toggleOnTrue(new RotateRight(armRotate));
     buttonBoard.button(4).or(driverController.povUp()).toggleOnTrue(new RotateHome(armRotate));
     driverController.y().whileTrue(new AngleIntake(armAngle)); //(new ExtendHome(armExtend).andThen(new ExtendIntake(armExtend)))
-    driverController.x().whileTrue(new LimeDrive(limelightJimmy, driveSubsystem, PipeType.INTAKE).alongWith(new ArmRotateTrack(armRotate)));
+    //driverController.x().whileTrue(new LimeDrive(limelightJimmy, driveSubsystem, PipeType.INTAKE).alongWith(new ArmRotateTrack(armRotate)));
     //buttonBoard.button(5).whileTrue(new Balance(driveSubsystem));
-    driverController.a().whileTrue(new LimeDrive(limelightJerry, driveSubsystem, PipeType.CUBE).andThen(new ClawMove(claw, true)));
-    driverController.b().whileTrue(new LimeDrive(limelightJerry, driveSubsystem, PipeType.CONE).andThen(new ClawMove(claw, true)));
+    driverController.a().whileTrue(new LimeDrive(limelightJerry, driveSubsystem, PipeType.CUBE).andThen(new InstantCommand(() -> claw.close())));
+    //driverController.b().whileTrue(new LimeDrive(limelightJerry, driveSubsystem, PipeType.CONE).andThen(new ClawMove(claw, true)));
     buttonBoard.button(5).whileTrue(new RotateManualPosition(armRotate, false));
     buttonBoard.button(6).whileTrue(new RotateManualPosition(armRotate, true));
     buttonBoard.axisGreaterThan(1, .2).whileTrue(new AngleManualPosition(armAngle, false));
-    buttonBoard.axisLessThan(1, -.2).whileTrue(new AngleManualPosition(armAngle, true));
+    buttonBoard.axisLessThan(1, -.2).whileTrue(new AngleDrop(armAngle));
     // buttonBoard.button(10).whileTrue(new ArmFrontHigh(armAngle, armExtend, armRotate));
     // buttonBoard.button(9).whileTrue(new ArmFrontMed(armAngle, armExtend, armRotate));
     // buttonBoard.button(8).whileTrue(new ArmFrontLow(armAngle, armExtend, armRotate));
@@ -175,9 +163,10 @@ public class RobotContainer {
     // // button 10 is back high
     // buttonBoard.button(10).whileTrue(new ArmBackHigh(armAngle, armExtend, armRotate));
     // // button 11 is open
-    buttonBoard.button(11).whileTrue(new ClawMove(claw, true));
+    buttonBoard.button(11).onTrue(new ClawMove(claw));
     // // button 12 is close
-    buttonBoard.button(12).whileTrue(new ClawMove(claw, false));
+    buttonBoard.button(12).whileTrue(new ClawAuto(claw).until(buttonBoard.button(11)));
+    //buttonBoard.button(12).whileTrue(new ClawMove(claw, false));
     driverController.leftBumper().whileTrue(new DefaultDrive(driveSubsystem, () -> driverController.getLeftY(), () -> driverController.getRightX(), 0.5));
     driverController.rightBumper().whileTrue(new DefaultDrive(driveSubsystem, () -> driverController.getLeftY(), () -> driverController.getRightX(), 1));
     //buttonBoard.button(5).whileTrue(new SetColor(null, 0.91));

@@ -13,6 +13,9 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+
+  public static double drivePower;
+
     /**
    * CamMode enumeration that allows for switching
    * between regular camera difficult to see vision targeting
@@ -65,8 +68,8 @@ public final class Constants {
       public static final int kArmRotate = 5;
       public static final int kArmExtend = 7;
       public static final int kArmAngle = 6;
-      public static final int kClawForward = 3;
-      public static final int kClawReverse = 2;
+      public static final int kClawForward = 2;
+      public static final int kClawReverse = 3;
     }
 
     public static class LEDConstants
