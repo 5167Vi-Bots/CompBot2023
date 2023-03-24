@@ -12,20 +12,12 @@ import frc.robot.subsystems.*;
 
 public class SetColorTimed extends CommandBase
 {
-    //String TeamColor;
     Lights m_Lights;
     int Level;
-    //SendableChooser<String> TeamChooser;
-    public SetColorTimed(Lights lights, int Level) {
+    public SetColorTimed(Lights lights) {
         super();
-        //this.TeamChooser = SmartDashboard.getData("TeamColor");
-        //Sendable x = SmartDashboard.getData("TeamColor");
-        
-        // this.TeamColor = SmartDashboard.getString("TeamColor", "TeamColor");
-        // System.out.println(TeamColor);
-
         m_Lights = lights;
-        this.Level = Level;
+        this.Level = 0;
         addRequirements(m_Lights);
     }
 
@@ -38,6 +30,20 @@ public class SetColorTimed extends CommandBase
     @Override 
     public void execute()
     {
+        double TimeRemaining; 
+        TimeRemaining = DriverStation.getMatchTime();
+
+        //Set blinking intensity
+        if (TimeRemaining > 30)
+            Level = 0;
+        else if (TimeRemaining > 15)
+            Level = 1;
+        else if (TimeRemaining > 10)
+            Level = 2;
+        else if (TimeRemaining > 5)
+            Level = 3;
+        
+        //Determine which color and blinking intensity then set it
         if (DriverStation.getAlliance() == DriverStation.Alliance.Red)
         {
             switch (Level)

@@ -74,7 +74,7 @@ public final class Constants {
 
     public static class LEDConstants
     {
-      public static final int TimerBlinkenPWM = 9;
+      public static final int TimerBlinkenPWM = 0;
       public static final int MessageBlinkenPWM = 8;
     }
 

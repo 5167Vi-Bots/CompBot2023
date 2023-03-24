@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.PipeType;
 import frc.robot.Constants.Ports.ControllerPorts;
+import frc.robot.Constants.Ports.LEDConstants;
 import frc.robot.commandgroups.ConeRampMove;
 import frc.robot.commands.AngleDrop;
 import frc.robot.commands.AngleHigh;
@@ -34,11 +35,13 @@ import frc.robot.commands.RotateHome;
 import frc.robot.commands.RotateLeft;
 import frc.robot.commands.RotateManualPosition;
 import frc.robot.commands.RotateRight;
+import frc.robot.commands.SetColorTimed;
 import frc.robot.subsystems.ArmAngle;
 import frc.robot.subsystems.ArmExtend;
 import frc.robot.subsystems.ArmRotate;
 import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.Lights;
 import frc.robot.subsystems.LimelightSubsystem;
 
 /**
@@ -57,6 +60,7 @@ public class RobotContainer {
   private final ArmAngle armAngle = new ArmAngle();
   private final Claw claw = new Claw();
 
+  private final Lights lights = new Lights(LEDConstants.TimerBlinkenPWM);
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driverController = new CommandXboxController(ControllerPorts.kDriverControllerPort);
   private final CommandJoystick buttonBoard = new CommandJoystick(ControllerPorts.kOperatorControllerPort);
@@ -73,6 +77,8 @@ public class RobotContainer {
       () -> driverController.getRightX(),
       0.75)
     );
+
+    lights.setDefaultCommand(new SetColorTimed(lights));
 
     // claw.setDefaultCommand(new ClawAuto(claw));
   }
