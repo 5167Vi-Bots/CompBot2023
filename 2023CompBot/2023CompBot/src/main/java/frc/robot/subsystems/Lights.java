@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import frc.robot.Constants;
 import frc.robot.Constants.LightConstants;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -19,10 +20,10 @@ public class Lights extends SubsystemBase {
     }
     
 
-    public void setColor(double Color)
+    public void setColor(Constants.LightConstants.LEDColors Color)
     {    
         System.out.println("Returning Color " + Color);
-        LEDController.set(Color);
+        LEDController.set(Color.PWMValue);
     }
 
 }
