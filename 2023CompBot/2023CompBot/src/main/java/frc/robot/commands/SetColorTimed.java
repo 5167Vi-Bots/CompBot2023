@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -12,20 +13,11 @@ import frc.robot.subsystems.*;
 
 public class SetColorTimed extends CommandBase
 {
-    //String TeamColor;
     Lights m_Lights;
     int Level;
-    //SendableChooser<String> TeamChooser;
-    public SetColorTimed(Lights lights, int Level) {
-        super();
-        //this.TeamChooser = SmartDashboard.getData("TeamColor");
-        //Sendable x = SmartDashboard.getData("TeamColor");
-        
-        // this.TeamColor = SmartDashboard.getString("TeamColor", "TeamColor");
-        // System.out.println(TeamColor);
-
+    public SetColorTimed(Lights lights) {
         m_Lights = lights;
-        this.Level = Level;
+        this.Level = 0;
         addRequirements(m_Lights);
     }
 
@@ -38,7 +30,22 @@ public class SetColorTimed extends CommandBase
     @Override 
     public void execute()
     {
-        if (DriverStation.getAlliance() == DriverStation.Alliance.Red)
+        double TimeRemaining; 
+        TimeRemaining = DriverStation.getMatchTime();
+
+        //Set blinking intensity
+        if (TimeRemaining > 30)
+            Level = 0;
+        else if (TimeRemaining > 15)
+            Level = 1;
+        else if (TimeRemaining > 5)
+            Level = 2;
+        else if (TimeRemaining > 0)
+            Level = 3;
+        
+        Alliance alliance = DriverStation.getAlliance();
+        //Determine which color and blinking intensity then set it
+        if (alliance == DriverStation.Alliance.Red)
         {
             switch (Level)
             {
@@ -56,7 +63,7 @@ public class SetColorTimed extends CommandBase
             break;
             }
         }
-        if (DriverStation.getAlliance() == DriverStation.Alliance.Blue)
+        else if (alliance == DriverStation.Alliance.Blue)
         {
             switch (Level)
             {
@@ -74,7 +81,7 @@ public class SetColorTimed extends CommandBase
             break;
             }
         }
-        if (DriverStation.getAlliance() == DriverStation.Alliance.Invalid)
+        else //(alliance == DriverStation.Alliance.Invalid)
         {
             switch (Level)
             {

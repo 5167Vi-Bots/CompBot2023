@@ -90,5 +90,9 @@ public class ArmRotate extends SubsystemBase{
         doMagic(-68500); //max neg -13800
     }
 
+    public void rotateTrack() {
+        doMagic(4450); //max neg -13800
+    }
+
 
 }

@@ -12,10 +12,11 @@ import static frc.robot.Constants.Ports.ArmConstants;
 public class ArmAngle extends SubsystemBase{
     private WPI_TalonFX armAngle;
     public double home = 0;
-    public double low = -82500;
-    public double med = -43500;
+    public double low = -78500;
+    public double med = -39500; // -43500
     public double high = -39500;
     public double intake = -33800;
+    public double drop = -48000;
 
     public ArmAngle() {
         armAngle = new WPI_TalonFX(ArmConstants.kArmAngle);
@@ -75,19 +76,23 @@ public class ArmAngle extends SubsystemBase{
 
     public void low(){
         // Dear programmers: T'is Austin. Change this value by increasing ticks in the negative direction Ex. (-75400 to -78000)
-        doMagic(-82500);
+        doMagic((int) low); //-82500 (positive to go upward)
+    }
+
+    public void drop() {
+        doMagic((int) drop);
     }
 
     public void med(){
-        doMagic(-43500); // 39
+        doMagic((int) med); // -43500
     }
 
     public void high(){
-        doMagic(-39500); // 40500
+        doMagic((int) high); // 40500
     }
 
     public void intake() {
-        doMagic(-33000); //-33800
+        doMagic((int) intake); //-33800
     }
 
 

@@ -5,20 +5,24 @@ import frc.robot.subsystems.Claw;
 
 public class ClawMove extends CommandBase {
     private Claw claw;
-    private boolean clawOpen;
 
-    public ClawMove(Claw claw, boolean clawOpen) {
+    public ClawMove(Claw claw){ //boolean clawOpen) {
         this.claw = claw;
-        this.clawOpen = clawOpen;
         addRequirements(claw);
     }
 
     @Override
-    public void execute() {
-        if (clawOpen) {
-            claw.open();
-        } else{
+    public void initialize() {
+        if (claw.isOpen()) {
             claw.close();
+        } else{
+            claw.open();
         }
+    }
+
+    @Override
+    public boolean isFinished() {
+        // TODO Auto-generated method stub
+        return true;
     }
 }

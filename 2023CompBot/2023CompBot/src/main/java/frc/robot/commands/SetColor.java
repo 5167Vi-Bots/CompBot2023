@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 //import frc.robot.Constants.Lights.*;
 import frc.robot.subsystems.*;
 
@@ -8,9 +9,8 @@ import frc.robot.subsystems.*;
 public class SetColor extends CommandBase
 {
     Lights m_Lights;
-    double Color;
-    public SetColor(Lights lights, double Color) {
-        super();
+    Constants.LightConstants.LEDColors Color;
+    public SetColor(Lights lights, Constants.LightConstants.LEDColors Color) {
         m_Lights = lights;
         this.Color = Color;
         addRequirements(m_Lights);
