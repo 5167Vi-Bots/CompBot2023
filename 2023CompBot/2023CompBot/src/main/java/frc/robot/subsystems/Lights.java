@@ -14,7 +14,6 @@ public class Lights extends SubsystemBase {
     private MotorController LEDController;   
 
     public Lights(int Channel) {
-        super();
         LEDController = new PWMSparkMax(Channel);
         
     }

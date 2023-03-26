@@ -11,7 +11,6 @@ public class SetColor extends CommandBase
     Lights m_Lights;
     Constants.LightConstants.LEDColors Color;
     public SetColor(Lights lights, Constants.LightConstants.LEDColors Color) {
-        super();
         m_Lights = lights;
         this.Color = Color;
         addRequirements(m_Lights);

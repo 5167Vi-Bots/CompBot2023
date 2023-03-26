@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -15,7 +16,6 @@ public class SetColorTimed extends CommandBase
     Lights m_Lights;
     int Level;
     public SetColorTimed(Lights lights) {
-        super();
         m_Lights = lights;
         this.Level = 0;
         addRequirements(m_Lights);
@@ -38,13 +38,14 @@ public class SetColorTimed extends CommandBase
             Level = 0;
         else if (TimeRemaining > 15)
             Level = 1;
-        else if (TimeRemaining > 10)
-            Level = 2;
         else if (TimeRemaining > 5)
+            Level = 2;
+        else if (TimeRemaining > 0)
             Level = 3;
         
+        Alliance alliance = DriverStation.getAlliance();
         //Determine which color and blinking intensity then set it
-        if (DriverStation.getAlliance() == DriverStation.Alliance.Red)
+        if (alliance == DriverStation.Alliance.Red)
         {
             switch (Level)
             {
@@ -62,7 +63,7 @@ public class SetColorTimed extends CommandBase
             break;
             }
         }
-        if (DriverStation.getAlliance() == DriverStation.Alliance.Blue)
+        else if (alliance == DriverStation.Alliance.Blue)
         {
             switch (Level)
             {
@@ -80,7 +81,7 @@ public class SetColorTimed extends CommandBase
             break;
             }
         }
-        if (DriverStation.getAlliance() == DriverStation.Alliance.Invalid)
+        else //(alliance == DriverStation.Alliance.Invalid)
         {
             switch (Level)
             {
